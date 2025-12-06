@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "MoonBit bindings for Cloudflare Workers APIs",
   "scripts": {
-    "build": "vite build",
     "dev": "wrangler dev fixtures/cf-worker.js",
     "test": "vitest run --config vitest.cf-config.ts e2e/cloudflare/moonbit-*.test.ts"
   },

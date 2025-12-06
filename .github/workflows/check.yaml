@@ -38,15 +38,14 @@ jobs:
         run: moon check --deny-warn
       - name: moon info
         run: |
-          moon info --target js
+          moon info
           git diff --exit-code
       - name: moon test
         run: |
-          moon test --target js
+          moon test
       - name: build
         run: |
-          moon build --target js
-          pnpm build
+          moon build
       - name: pnpm test
         run: |
           pnpm test
