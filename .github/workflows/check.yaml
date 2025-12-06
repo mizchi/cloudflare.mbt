@@ -1,0 +1,52 @@
+name: check
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Setup Moon
+        uses: illusory0x0/setup-moonbit@v0.1.0
+        with: 
+          version: stable
+      - name: moon version
+        run: |
+          moon version --all
+      - name: install module dependencies
+        run: |
+          moon update
+          moon install
+      - name: moon check
+        run: moon check --deny-warn
+      - name: moon info
+        run: |
+          moon info --target js
+          git diff --exit-code
+      - name: moon test
+        run: |
+          moon test --target js
+      - name: build
+        run: |
+          moon build --target js
+          pnpm build
+      - name: pnpm test
+        run: |
+          pnpm test
