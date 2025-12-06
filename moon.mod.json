@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "deps": {
     "moonbitlang/async": "0.14.2",
-    "mizchi/js": {
-      "path": "../js.mbt"
-    }
+    "mizchi/js": "0.8.3"
   },
   "readme": "README.md",
   "repository": "https://github.com/mizchi/cloudflare.mbt",
