@@ -500,6 +500,13 @@ pub async fn DurableObjectStorage::sync(self : DurableObjectStorage) -> Unit {
 }
 
 ///|
+/// Get the SQLite storage interface
+/// Use this to execute SQL queries directly on the Durable Object's database
+pub fn DurableObjectStorage::sql(self : DurableObjectStorage) -> SqlStorage {
+  self.as_any()["sql"].cast()
+}
+
+///|
 /// Options for get operations
 pub(all) struct DurableObjectGetOptions {
   allowConcurrency : Bool?
@@ -785,4 +792,167 @@ pub async fn DurableObjectTransaction::delete_alarm(
     ._call("deleteAlarm", [])
     .cast()
   promise.wait()
+}
+
+// ============================================================================
+// SQLite Storage API for Durable Objects
+// ============================================================================
+
+///|
+/// SQLite Storage - provides SQL interface for Durable Object storage
+/// Accessed via `storage.sql`
+#external
+pub type SqlStorage
+
+///|
+pub fn SqlStorage::as_any(self : SqlStorage) -> @core.Any = "%identity"
+
+///|
+/// Execute a SQL query with optional parameter bindings
+/// Returns a cursor for iterating over results
+pub fn SqlStorage::exec(
+  self : SqlStorage,
+  query : String,
+  bindings : Array[@core.Any],
+) -> SqlStorageCursor {
+  // Use apply to spread the bindings array as individual arguments
+  let sql_js = self.as_any()
+  let exec_fn = sql_js["exec"]
+
+  // Build arguments array: [query, ...bindings]
+  let args_js = @core.new_array()
+  @core.any(args_js)._call("push", [@core.any(query)]) |> ignore
+  let mut i = 0
+  while i < bindings.length() {
+    @core.any(args_js)._call("push", [@core.any(bindings[i])]) |> ignore
+    i = i + 1
+  }
+
+  exec_fn._call("apply", [sql_js, @core.any(args_js)]).cast()
+}
+
+///|
+/// Execute a SQL query without bindings
+pub fn SqlStorage::exec_raw(self : SqlStorage, query : String) -> SqlStorageCursor {
+  self.as_any()._call("exec", [@core.any(query)]).cast()
+}
+
+///|
+/// Execute a SQL query with a single binding
+pub fn SqlStorage::exec1(
+  self : SqlStorage,
+  query : String,
+  p1 : @core.Any,
+) -> SqlStorageCursor {
+  self.exec(query, [p1])
+}
+
+///|
+/// Execute a SQL query with two bindings
+pub fn SqlStorage::exec2(
+  self : SqlStorage,
+  query : String,
+  p1 : @core.Any,
+  p2 : @core.Any,
+) -> SqlStorageCursor {
+  self.exec(query, [p1, p2])
+}
+
+///|
+/// Execute a SQL query with three bindings
+pub fn SqlStorage::exec3(
+  self : SqlStorage,
+  query : String,
+  p1 : @core.Any,
+  p2 : @core.Any,
+  p3 : @core.Any,
+) -> SqlStorageCursor {
+  self.exec(query, [p1, p2, p3])
+}
+
+///|
+/// Get the current database size in bytes
+pub fn SqlStorage::database_size(self : SqlStorage) -> Int {
+  self.as_any()["databaseSize"].cast()
+}
+
+///|
+/// SQLite Storage Cursor - iterator over query results
+#external
+pub type SqlStorageCursor
+
+///|
+pub fn SqlStorageCursor::as_any(self : SqlStorageCursor) -> @core.Any = "%identity"
+
+///|
+/// Get column names in order
+pub fn SqlStorageCursor::column_names(self : SqlStorageCursor) -> Array[String] {
+  self.as_any()["columnNames"].cast()
+}
+
+///|
+/// Get the number of rows read so far
+pub fn SqlStorageCursor::rows_read(self : SqlStorageCursor) -> Int {
+  self.as_any()["rowsRead"].cast()
+}
+
+///|
+/// Get the number of rows written so far
+pub fn SqlStorageCursor::rows_written(self : SqlStorageCursor) -> Int {
+  self.as_any()["rowsWritten"].cast()
+}
+
+///|
+/// Get the next row from the cursor
+/// Returns {done: bool, value: row} iterator result
+pub fn SqlStorageCursor::next(self : SqlStorageCursor) -> SqlStorageIteratorResult {
+  self.as_any()._call("next", []).cast()
+}
+
+///|
+/// Convert all remaining cursor values to an array of row objects
+pub fn SqlStorageCursor::to_array(self : SqlStorageCursor) -> Array[@core.Any] {
+  self.as_any()._call("toArray", []).cast()
+}
+
+///|
+/// Get exactly one row from the cursor
+/// Throws an error if the result set doesn't contain exactly one row
+pub fn SqlStorageCursor::one(self : SqlStorageCursor) -> @core.Any {
+  self.as_any()._call("one", []).cast()
+}
+
+///|
+/// Get a raw iterator that returns rows as arrays instead of objects
+pub fn SqlStorageCursor::raw(self : SqlStorageCursor) -> SqlStorageCursor {
+  self.as_any()._call("raw", []).cast()
+}
+
+///|
+/// Iterator result from SqlStorageCursor::next()
+#external
+pub type SqlStorageIteratorResult
+
+///|
+pub fn SqlStorageIteratorResult::as_any(
+  self : SqlStorageIteratorResult,
+) -> @core.Any = "%identity"
+
+///|
+/// Check if the iterator is done
+pub fn SqlStorageIteratorResult::done(self : SqlStorageIteratorResult) -> Bool {
+  self.as_any()["done"].cast()
+}
+
+///|
+/// Get the value (row) from the iterator result
+pub fn SqlStorageIteratorResult::value(
+  self : SqlStorageIteratorResult,
+) -> @core.Any? {
+  let v = self.as_any()["value"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v)
+  }
 }
