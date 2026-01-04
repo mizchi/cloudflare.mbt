@@ -1,6 +1,6 @@
 {
   "name": "@mizchi/cloudflare-mbt",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MoonBit bindings for Cloudflare Workers APIs",
   "scripts": {
     "dev": "wrangler dev fixtures/cf-worker.js",
