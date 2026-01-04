@@ -111,11 +111,16 @@ pub fn D1PreparedStatement::bind3(
 ///|
 /// Execute the statement and return first row
 pub async fn D1PreparedStatement::first(self : Self) -> @core.Any? {
-  let promise : @core.Promise[@core.Any?] = self
+  let promise : @core.Promise[@core.Any] = self
     .as_any()
     ._call("first", [])
     .cast()
-  promise.wait()
+  let result = promise.wait()
+  if @core.is_null(result) || @core.typeof_(result) == "undefined" {
+    None
+  } else {
+    Some(result)
+  }
 }
 
 ///|
@@ -124,11 +129,16 @@ pub async fn D1PreparedStatement::first_col(
   self : Self,
   col_name : String,
 ) -> @core.Any? {
-  let promise : @core.Promise[@core.Any?] = self
+  let promise : @core.Promise[@core.Any] = self
     .as_any()
     ._call("first", [@core.any(col_name)])
     .cast()
-  promise.wait()
+  let result = promise.wait()
+  if @core.is_null(result) || @core.typeof_(result) == "undefined" {
+    None
+  } else {
+    Some(result)
+  }
 }
 
 ///|
@@ -165,52 +175,164 @@ pub async fn D1PreparedStatement::raw(
 }
 
 ///|
-/// Result of a D1 query
-pub(all) struct D1Result {
-  results : Array[@core.Any]?
-  success : Bool
-  meta : D1Meta?
-  error : String?
-}
+/// Result of a D1 query (external type to properly handle JS object properties)
+#external
+pub type D1Result
 
 ///|
 pub fn D1Result::as_any(self : D1Result) -> @core.Any = "%identity"
 
 ///|
-/// Get results from D1Result
-///
-/// Note: The returned array is a snapshot and should be treated as immutable.
-pub fn D1Result::get_results(self : Self) -> Array[@core.Any] {
-  match self.results {
-    Some(r) => r
-    None => []
+/// Check if the query was successful
+pub fn D1Result::success(self : D1Result) -> Bool {
+  self.as_any()["success"].cast()
+}
+
+///|
+/// Get the error message if any
+pub fn D1Result::error(self : D1Result) -> String? {
+  let err = self.as_any()["error"]
+  if @core.typeof_(err) == "undefined" || @core.is_null(err) {
+    None
+  } else {
+    Some(err.cast())
   }
 }
 
 ///|
-/// Metadata about query execution
-pub(all) struct D1Meta {
-  duration : Double? // Query duration in milliseconds
-  rows_read : Int? // Number of rows read
-  rows_written : Int? // Number of rows written
-  last_row_id : Int? // Last inserted row ID
-  changed_db : Bool? // Whether database was changed
-  changes : Int? // Number of rows changed
-  size_after : Int? // Database size after query
+/// Get the query metadata
+pub fn D1Result::meta(self : D1Result) -> D1Meta? {
+  let meta = self.as_any()["meta"]
+  if @core.typeof_(meta) == "undefined" || @core.is_null(meta) {
+    None
+  } else {
+    Some(meta.cast())
+  }
 }
+
+///|
+/// Get results from D1Result as a raw JS array
+pub fn D1Result::results_raw(self : D1Result) -> @core.Any {
+  let results = self.as_any()["results"]
+  if @core.typeof_(results) == "undefined" || @core.is_null(results) {
+    @core.new_array()
+  } else {
+    results
+  }
+}
+
+///|
+/// Get results from D1Result
+///
+/// Note: The returned array is a snapshot and should be treated as immutable.
+pub fn D1Result::get_results(self : D1Result) -> Array[@core.Any] {
+  self.results_raw().cast()
+}
+
+///|
+/// Metadata about query execution (external type)
+#external
+pub type D1Meta
 
 ///|
 pub fn D1Meta::as_any(self : D1Meta) -> @core.Any = "%identity"
 
 ///|
-/// Result of exec operation
-pub(all) struct D1ExecResult {
-  count : Int // Number of statements executed
-  duration : Double // Total duration in milliseconds
+/// Query duration in milliseconds
+pub fn D1Meta::duration(self : D1Meta) -> Double? {
+  let v = self.as_any()["duration"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v.cast())
+  }
 }
 
 ///|
+/// Number of rows read
+pub fn D1Meta::rows_read(self : D1Meta) -> Int? {
+  let v = self.as_any()["rows_read"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v.cast())
+  }
+}
+
+///|
+/// Number of rows written
+pub fn D1Meta::rows_written(self : D1Meta) -> Int? {
+  let v = self.as_any()["rows_written"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v.cast())
+  }
+}
+
+///|
+/// Last inserted row ID
+pub fn D1Meta::last_row_id(self : D1Meta) -> Int? {
+  let v = self.as_any()["last_row_id"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v.cast())
+  }
+}
+
+///|
+/// Whether database was changed
+pub fn D1Meta::changed_db(self : D1Meta) -> Bool? {
+  let v = self.as_any()["changed_db"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v.cast())
+  }
+}
+
+///|
+/// Number of rows changed
+pub fn D1Meta::changes(self : D1Meta) -> Int? {
+  let v = self.as_any()["changes"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v.cast())
+  }
+}
+
+///|
+/// Database size after query
+pub fn D1Meta::size_after(self : D1Meta) -> Int? {
+  let v = self.as_any()["size_after"]
+  if @core.typeof_(v) == "undefined" || @core.is_null(v) {
+    None
+  } else {
+    Some(v.cast())
+  }
+}
+
+///|
+/// Result of exec operation (external type)
+#external
+pub type D1ExecResult
+
+///|
 pub fn D1ExecResult::as_any(self : D1ExecResult) -> @core.Any = "%identity"
+
+///|
+/// Number of statements executed
+pub fn D1ExecResult::count(self : D1ExecResult) -> Int {
+  self.as_any()["count"].cast()
+}
+
+///|
+/// Total duration in milliseconds
+pub fn D1ExecResult::duration(self : D1ExecResult) -> Double {
+  self.as_any()["duration"].cast()
+}
 
 ///|
 /// Legacy type alias for compatibility

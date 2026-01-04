@@ -9,6 +9,7 @@ export default defineWorkersConfig({
         miniflare: {
           // Add any Miniflare-specific options here
           kvNamespaces: ["TEST_KV", "MY_KV"],
+          d1Databases: ["TEST_DB"],
         },
       },
     },
