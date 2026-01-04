@@ -19,7 +19,9 @@ extern "js" fn get_timestamp() -> Int =
 
 ///|
 /// Get request method
-extern "js" fn get_request_method(req : @cloudflare.CloudflareRequest) -> String =
+extern "js" fn get_request_method(
+  req : @cloudflare.CloudflareRequest,
+) -> String =
   #| (req) => req.method
 
 ///|
@@ -48,7 +50,9 @@ fn get_cms_r2(env : @cloudflare.CloudflareEnv) -> @cloudflare.R2Bucket? {
 
 ///|
 /// Parse request body as text
-extern "js" fn get_request_body(req : @cloudflare.CloudflareRequest) -> @core.Promise[String] =
+extern "js" fn get_request_body(
+  req : @cloudflare.CloudflareRequest,
+) -> @core.Promise[String] =
   #| (req) => req.text()
 
 ///|
@@ -58,7 +62,9 @@ extern "js" fn parse_json(s : String) -> @core.Any =
 
 ///|
 /// Create Response from ReadableStream
-extern "js" fn create_stream_response(stream : @streams.ReadableStream) -> @http.Response =
+extern "js" fn create_stream_response(
+  stream : @streams.ReadableStream,
+) -> @http.Response =
   #| (stream) => new Response(stream)
 
 ///|
@@ -77,11 +83,15 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
     // Get bindings
     let db = match get_cms_db(env) {
       Some(d) => d
-      None => return cms_json_response("{\"error\":\"Database not configured\"}", 500)
+      None =>
+        return cms_json_response("{\"error\":\"Database not configured\"}", 500)
     }
     let r2 = match get_cms_r2(env) {
       Some(r) => r
-      None => return cms_json_response("{\"error\":\"R2 bucket not configured\"}", 500)
+      None =>
+        return cms_json_response(
+          "{\"error\":\"R2 bucket not configured\"}", 500,
+        )
     }
 
     // Initialize database schema if needed
@@ -89,17 +99,23 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
       let _ = db.exec(
         "CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, slug TEXT UNIQUE NOT NULL, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)",
       ) catch {
-        e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+        e =>
+          return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
       }
-      return cms_json_response("{\"success\":true,\"message\":\"Schema initialized\"}", 200)
+      return cms_json_response(
+        "{\"success\":true,\"message\":\"Schema initialized\"}", 200,
+      )
     }
 
     // Articles CRUD
     if pathname == "/cms/articles" && req_method == "GET" {
       // List all articles
-      let stmt = db.prepare("SELECT id, title, slug, created_at, updated_at FROM articles ORDER BY created_at DESC")
+      let stmt = db.prepare(
+        "SELECT id, title, slug, created_at, updated_at FROM articles ORDER BY created_at DESC",
+      )
       let result = stmt.all() catch {
-        e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+        e =>
+          return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
       }
       let rows = result.get_results()
       let articles = @core.new_array()
@@ -120,7 +136,6 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
       response["count"] = @core.any(rows.length())
       return cms_json_response(@js.JSON::stringify(response), 200)
     }
-
     if pathname == "/cms/articles" && req_method == "POST" {
       // Create article
       let body_promise : @core.Promise[String] = get_request_body(req)
@@ -130,9 +145,10 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
       let content : String = data["content"].cast()
       let slug : String = data["slug"].cast()
       let now = get_timestamp()
-
       let stmt = db
-        .prepare("INSERT INTO articles (title, content, slug, created_at, updated_at) VALUES (?, ?, ?, ?, ?)")
+        .prepare(
+          "INSERT INTO articles (title, content, slug, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+        )
         .bind([
           @core.any(title),
           @core.any(content),
@@ -141,7 +157,8 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
           @core.any(now),
         ])
       let result = stmt.run() catch {
-        e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+        e =>
+          return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
       }
       let response = @core.new_object()
       response["success"] = @core.any(result.success())
@@ -152,14 +169,19 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
     // Single article operations
     if pathname.has_prefix("/cms/articles/") {
       let slug = pathname[14:].to_string() // Remove "/cms/articles/"
-
       if req_method == "GET" {
         // Get single article
         let stmt = db
-          .prepare("SELECT id, title, content, slug, created_at, updated_at FROM articles WHERE slug = ?")
+          .prepare(
+            "SELECT id, title, content, slug, created_at, updated_at FROM articles WHERE slug = ?",
+          )
           .bind([@core.any(slug)])
         let row = stmt.first() catch {
-          e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+          e =>
+            return cms_json_response(
+              "{\"error\":\"" + e.to_string() + "\"}",
+              500,
+            )
         }
         match row {
           Some(r) => {
@@ -172,10 +194,10 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
             article["updated_at"] = r["updated_at"]
             return cms_json_response(@js.JSON::stringify(article), 200)
           }
-          None => return cms_json_response("{\"error\":\"Article not found\"}", 404)
+          None =>
+            return cms_json_response("{\"error\":\"Article not found\"}", 404)
         }
       }
-
       if req_method == "PUT" {
         // Update article
         let body_promise : @core.Promise[String] = get_request_body(req)
@@ -184,9 +206,10 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
         let title : String = data["title"].cast()
         let content : String = data["content"].cast()
         let now = get_timestamp()
-
         let stmt = db
-          .prepare("UPDATE articles SET title = ?, content = ?, updated_at = ? WHERE slug = ?")
+          .prepare(
+            "UPDATE articles SET title = ?, content = ?, updated_at = ? WHERE slug = ?",
+          )
           .bind([
             @core.any(title),
             @core.any(content),
@@ -194,7 +217,11 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
             @core.any(slug),
           ])
         let result = stmt.run() catch {
-          e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+          e =>
+            return cms_json_response(
+              "{\"error\":\"" + e.to_string() + "\"}",
+              500,
+            )
         }
         let meta = result.meta()
         let changed = match meta {
@@ -209,14 +236,17 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
         response["slug"] = @core.any(slug)
         return cms_json_response(@js.JSON::stringify(response), 200)
       }
-
       if req_method == "DELETE" {
         // Delete article
         let stmt = db
           .prepare("DELETE FROM articles WHERE slug = ?")
           .bind([@core.any(slug)])
         let result = stmt.run() catch {
-          e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+          e =>
+            return cms_json_response(
+              "{\"error\":\"" + e.to_string() + "\"}",
+              500,
+            )
         }
         let meta = result.meta()
         let changed = match meta {
@@ -239,7 +269,11 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
           let body_promise : @core.Promise[String] = get_request_body(req)
           let body = body_promise.wait()
           let obj = r2.put(k, @core.any(body)) catch {
-            e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+            e =>
+              return cms_json_response(
+                "{\"error\":\"" + e.to_string() + "\"}",
+                500,
+              )
           }
           let response = @core.new_object()
           response["success"] = @core.any(true)
@@ -247,15 +281,16 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
           response["size"] = @core.any(obj.size())
           return cms_json_response(@js.JSON::stringify(response), 201)
         }
-        None => return cms_json_response("{\"error\":\"Missing key parameter\"}", 400)
+        None =>
+          return cms_json_response("{\"error\":\"Missing key parameter\"}", 400)
       }
     }
-
     if pathname.has_prefix("/cms/images/") && req_method == "GET" {
       // Get image
       let key = pathname[12:].to_string() // Remove "/cms/images/"
       let obj = r2.get(key) catch {
-        e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+        e =>
+          return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
       }
       match obj {
         Some(o) => {
@@ -265,12 +300,14 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
         None => return cms_json_response("{\"error\":\"Image not found\"}", 404)
       }
     }
-
     if pathname.has_prefix("/cms/images/") && req_method == "DELETE" {
       // Delete image
       let key = pathname[12:].to_string()
       r2.delete(key) catch {
-        _ => return cms_json_response("{\"error\":\"Failed to delete image\"}", 500)
+        _ =>
+          return cms_json_response(
+            "{\"error\":\"Failed to delete image\"}", 500,
+          )
       }
       return cms_json_response("{\"success\":true}", 200)
     }
@@ -284,7 +321,8 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
         .prepare("SELECT title, content FROM articles WHERE slug = ?")
         .bind([@core.any(slug)])
       let row = stmt.first() catch {
-        e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+        e =>
+          return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
       }
       match row {
         Some(r) => {
@@ -297,26 +335,40 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
 
           // Use HTMLRewriter to inject content
           let rewriter = @cloudflare.HTMLRewriter::new()
-            .on("title", @cloudflare.ElementHandler::element_only(fn(el) {
-              el.set_inner_content_text(title + " - CMS") |> ignore
-            }))
-            .on("h1.title", @cloudflare.ElementHandler::element_only(fn(el) {
-              el.set_inner_content_text(title) |> ignore
-            }))
-            .on("div.content", @cloudflare.ElementHandler::element_only(fn(el) {
-              el.set_inner_content(content, @cloudflare.ContentOptions::html_mode()) |> ignore
-            }))
-
+            .on(
+              "title",
+              @cloudflare.ElementHandler::element_only(fn(el) {
+                el.set_inner_content_text(title + " - CMS") |> ignore
+              }),
+            )
+            .on(
+              "h1.title",
+              @cloudflare.ElementHandler::element_only(fn(el) {
+                el.set_inner_content_text(title) |> ignore
+              }),
+            )
+            .on(
+              "div.content",
+              @cloudflare.ElementHandler::element_only(fn(el) {
+                el.set_inner_content(
+                  content,
+                  @cloudflare.ContentOptions::html_mode(),
+                )
+                |> ignore
+              }),
+            )
           return rewriter.transform(input_response)
         }
-        None => return cms_json_response("{\"error\":\"Article not found\"}", 404)
+        None =>
+          return cms_json_response("{\"error\":\"Article not found\"}", 404)
       }
     }
 
     // List images
     if pathname == "/cms/images" && req_method == "GET" {
       let result = r2.list() catch {
-        e => return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
+        e =>
+          return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
       }
       let objects = result.objects()
       let images = @core.new_array()

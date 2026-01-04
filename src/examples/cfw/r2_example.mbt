@@ -60,7 +60,9 @@ pub fn get_r2_handler() -> @cloudflare.CloudflareFetchHandler {
           r2_json_response(@js.JSON::stringify(response), 200)
         }
         _ =>
-          r2_json_response("{\"error\":\"Missing key or value parameter\"}", 400)
+          r2_json_response(
+            "{\"error\":\"Missing key or value parameter\"}", 400,
+          )
       }
     } else if pathname == "/r2/get" {
       // Get an object
@@ -137,12 +139,20 @@ pub fn get_r2_handler() -> @cloudflare.CloudflareFetchHandler {
       // List objects
       let prefix = url.searchParams().get("prefix")
       let result = match prefix {
-        Some(p) => bucket.list(prefix=p) catch {
-          _ => return r2_json_response("{\"error\":\"Failed to list objects\"}", 500)
-        }
-        None => bucket.list() catch {
-          _ => return r2_json_response("{\"error\":\"Failed to list objects\"}", 500)
-        }
+        Some(p) =>
+          bucket.list(prefix=p) catch {
+            _ =>
+              return r2_json_response(
+                "{\"error\":\"Failed to list objects\"}", 500,
+              )
+          }
+        None =>
+          bucket.list() catch {
+            _ =>
+              return r2_json_response(
+                "{\"error\":\"Failed to list objects\"}", 500,
+              )
+          }
       }
       let objects = result.objects()
       let keys = @core.new_array()

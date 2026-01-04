@@ -445,9 +445,7 @@ pub fn WaitForEventOptions::with_timeout(
 pub type WorkflowEventPayload
 
 ///|
-pub fn WorkflowEventPayload::as_any(
-  self : WorkflowEventPayload,
-) -> @core.Any = "%identity"
+pub fn WorkflowEventPayload::as_any(self : WorkflowEventPayload) -> @core.Any = "%identity"
 
 ///|
 /// Get the event type
@@ -457,9 +455,7 @@ pub fn WorkflowEventPayload::event_type(self : WorkflowEventPayload) -> String {
 
 ///|
 /// Get the payload data
-pub fn WorkflowEventPayload::payload(
-  self : WorkflowEventPayload,
-) -> @core.Any? {
+pub fn WorkflowEventPayload::payload(self : WorkflowEventPayload) -> @core.Any? {
   let p = self.as_any()["payload"]
   if @core.is_null(p) || @core.typeof_(p) == "undefined" {
     None
@@ -470,7 +466,9 @@ pub fn WorkflowEventPayload::payload(
 
 ///|
 /// Get the timestamp
-pub fn WorkflowEventPayload::timestamp(self : WorkflowEventPayload) -> @core.Any {
+pub fn WorkflowEventPayload::timestamp(
+  self : WorkflowEventPayload,
+) -> @core.Any {
   self.as_any()["timestamp"]
 }
 

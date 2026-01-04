@@ -169,7 +169,6 @@ pub fn VectorizeVector::to_js(self : VectorizeVector) -> @core.Any {
     i = i + 1
   }
   obj["values"] = @core.any(values_js)
-
   if self.ns is Some(ns_val) {
     obj["namespace"] = @core.any(ns_val)
   }
@@ -196,7 +195,8 @@ pub fn VectorizeVector::from_js(js : @core.Any) -> VectorizeVector {
 
   // Handle optional namespace
   let ns_js = js["namespace"]
-  let ns : String? = if @core.typeof_(ns_js) == "undefined" || @core.is_null(ns_js) {
+  let ns : String? = if @core.typeof_(ns_js) == "undefined" ||
+    @core.is_null(ns_js) {
     None
   } else {
     Some(ns_js.cast())
@@ -210,7 +210,6 @@ pub fn VectorizeVector::from_js(js : @core.Any) -> VectorizeVector {
   } else {
     Some(meta_js)
   }
-
   { id, values, ns, metadata }
 }
 
@@ -233,7 +232,9 @@ pub(all) enum VectorizeReturnMetadata {
 }
 
 ///|
-pub fn VectorizeReturnMetadata::to_string(self : VectorizeReturnMetadata) -> String {
+pub fn VectorizeReturnMetadata::to_string(
+  self : VectorizeReturnMetadata,
+) -> String {
   match self {
     None_ => "none"
     Indexed => "indexed"
@@ -285,7 +286,9 @@ pub fn VectorizeMatches::as_any(self : VectorizeMatches) -> @core.Any = "%identi
 
 ///|
 /// Get the matched vectors
-pub fn VectorizeMatches::matches(self : VectorizeMatches) -> Array[VectorizeMatch] {
+pub fn VectorizeMatches::matches(
+  self : VectorizeMatches,
+) -> Array[VectorizeMatch] {
   let matches_js = self.as_any()["matches"]
   let len : Int = matches_js["length"].cast()
   let matches : Array[VectorizeMatch] = []

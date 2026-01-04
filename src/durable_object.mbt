@@ -850,13 +850,15 @@ pub fn SqlStorage::exec(
     @core.any(args_js)._call("push", [@core.any(bindings[i])]) |> ignore
     i = i + 1
   }
-
   exec_fn._call("apply", [sql_js, @core.any(args_js)]).cast()
 }
 
 ///|
 /// Execute a SQL query without bindings
-pub fn SqlStorage::exec_raw(self : SqlStorage, query : String) -> SqlStorageCursor {
+pub fn SqlStorage::exec_raw(
+  self : SqlStorage,
+  query : String,
+) -> SqlStorageCursor {
   self.as_any()._call("exec", [@core.any(query)]).cast()
 }
 
@@ -928,7 +930,9 @@ pub fn SqlStorageCursor::rows_written(self : SqlStorageCursor) -> Int {
 ///|
 /// Get the next row from the cursor
 /// Returns {done: bool, value: row} iterator result
-pub fn SqlStorageCursor::next(self : SqlStorageCursor) -> SqlStorageIteratorResult {
+pub fn SqlStorageCursor::next(
+  self : SqlStorageCursor,
+) -> SqlStorageIteratorResult {
   self.as_any()._call("next", []).cast()
 }
 

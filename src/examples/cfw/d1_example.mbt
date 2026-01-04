@@ -43,15 +43,17 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
     // Route handling for D1 operations
     if pathname == "/d1/init" {
       // Initialize the users table
-      let _ = db.prepare(
-        "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT UNIQUE, age INTEGER)",
-      ).run() catch {
-        e =>
-          return d1_json_response(
-            "{\"error\":\"Failed to create table: " + e.to_string() + "\"}",
-            500,
-          )
-      }
+      let _ = db
+        .prepare(
+          "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT UNIQUE, age INTEGER)",
+        )
+        .run() catch {
+          e =>
+            return d1_json_response(
+              "{\"error\":\"Failed to create table: " + e.to_string() + "\"}",
+              500,
+            )
+        }
       d1_json_response("{\"success\":true,\"message\":\"Table created\"}", 200)
     } else if pathname == "/d1/users/create" {
       // Create a new user
@@ -65,19 +67,17 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
             None => 0
           }
           let result = db
-            .prepare(
-              "INSERT INTO users (name, email, age) VALUES (?, ?, ?)",
-            )
+            .prepare("INSERT INTO users (name, email, age) VALUES (?, ?, ?)")
             .bind3(@core.any(n), @core.any(e), @core.any(age))
             .run() catch {
-            err =>
-              return d1_json_response(
-                "{\"error\":\"Failed to insert user: " +
-                err.to_string() +
-                "\"}",
-                500,
-              )
-          }
+              err =>
+                return d1_json_response(
+                  "{\"error\":\"Failed to insert user: " +
+                  err.to_string() +
+                  "\"}",
+                  500,
+                )
+            }
           if result.success() {
             let last_id = match result.meta() {
               Some(m) =>
@@ -87,16 +87,15 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
                 }
               None => "null"
             }
-            d1_json_response(
-              "{\"success\":true,\"id\":" + last_id + "}",
-              200,
-            )
+            d1_json_response("{\"success\":true,\"id\":" + last_id + "}", 200)
           } else {
             d1_json_response("{\"error\":\"Insert failed\"}", 500)
           }
         }
         _ =>
-          d1_json_response("{\"error\":\"Missing name or email parameter\"}", 400)
+          d1_json_response(
+            "{\"error\":\"Missing name or email parameter\"}", 400,
+          )
       }
     } else if pathname == "/d1/users/get" {
       // Get a user by ID
@@ -107,11 +106,11 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
             .prepare("SELECT * FROM users WHERE id = ?")
             .bind1(@core.any(@global.parse_int(i).unwrap_or(0)))
             .first() catch {
-            _ =>
-              return d1_json_response(
-                "{\"error\":\"Failed to get user\"}", 500,
-              )
-          }
+              _ =>
+                return d1_json_response(
+                  "{\"error\":\"Failed to get user\"}", 500,
+                )
+            }
           match row {
             Some(r) => {
               let json_str = @js.JSON::stringify(r)
@@ -125,9 +124,9 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
     } else if pathname == "/d1/users/list" {
       // List all users
       let result = db.prepare("SELECT * FROM users").all() catch {
-        _ =>
-          return d1_json_response("{\"error\":\"Failed to list users\"}", 500)
-      }
+          _ =>
+            return d1_json_response("{\"error\":\"Failed to list users\"}", 500)
+        }
       if result.success() {
         let results = result.get_results()
         let response = @core.new_object()
@@ -157,11 +156,11 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
               @core.any(@global.parse_int(i).unwrap_or(0)),
             )
             .run() catch {
-            _ =>
-              return d1_json_response(
-                "{\"error\":\"Failed to update user\"}", 500,
-              )
-          }
+              _ =>
+                return d1_json_response(
+                  "{\"error\":\"Failed to update user\"}", 500,
+                )
+            }
           if result.success() {
             let changes = match result.meta() {
               Some(m) =>
@@ -179,7 +178,8 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
             d1_json_response("{\"error\":\"Update failed\"}", 500)
           }
         }
-        _ => d1_json_response("{\"error\":\"Missing id or name parameter\"}", 400)
+        _ =>
+          d1_json_response("{\"error\":\"Missing id or name parameter\"}", 400)
       }
     } else if pathname == "/d1/users/delete" {
       // Delete a user
@@ -190,11 +190,11 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
             .prepare("DELETE FROM users WHERE id = ?")
             .bind1(@core.any(@global.parse_int(i).unwrap_or(0)))
             .run() catch {
-            _ =>
-              return d1_json_response(
-                "{\"error\":\"Failed to delete user\"}", 500,
-              )
-          }
+              _ =>
+                return d1_json_response(
+                  "{\"error\":\"Failed to delete user\"}", 500,
+                )
+            }
           if result.success() {
             let changes = match result.meta() {
               Some(m) =>
@@ -216,12 +216,14 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
       }
     } else if pathname == "/d1/users/count" {
       // Count users
-      let count_val = db.prepare("SELECT COUNT(*) as count FROM users").first_col(
-        "count",
-      ) catch {
-        _ =>
-          return d1_json_response("{\"error\":\"Failed to count users\"}", 500)
-      }
+      let count_val = db
+        .prepare("SELECT COUNT(*) as count FROM users")
+        .first_col("count") catch {
+          _ =>
+            return d1_json_response(
+              "{\"error\":\"Failed to count users\"}", 500,
+            )
+        }
       match count_val {
         Some(c) => {
           let count_str = @js.JSON::stringify(c)
@@ -232,9 +234,9 @@ pub fn get_d1_handler() -> @cloudflare.CloudflareFetchHandler {
     } else if pathname == "/d1/cleanup" {
       // Drop the users table
       let _ = db.prepare("DROP TABLE IF EXISTS users").run() catch {
-        _ =>
-          return d1_json_response("{\"error\":\"Failed to drop table\"}", 500)
-      }
+          _ =>
+            return d1_json_response("{\"error\":\"Failed to drop table\"}", 500)
+        }
       d1_json_response("{\"success\":true,\"message\":\"Table dropped\"}", 200)
     } else {
       // Help/index page

@@ -85,7 +85,9 @@ pub fn ElementHandler::text_only(f : (TextChunk) -> Unit) -> ElementHandler {
 
 ///|
 /// Create a comments-only handler
-pub fn ElementHandler::comments_only(f : (HTMLComment) -> Unit) -> ElementHandler {
+pub fn ElementHandler::comments_only(
+  f : (HTMLComment) -> Unit,
+) -> ElementHandler {
   { element: None, comments: Some(f), text: None }
 }
 
@@ -203,7 +205,10 @@ pub fn Element::set_attribute(
   name : String,
   value : String,
 ) -> Element {
-  self.as_any()._call("setAttribute", [@core.any(name), @core.any(value)]).cast()
+  self
+  .as_any()
+  ._call("setAttribute", [@core.any(name), @core.any(value)])
+  .cast()
 }
 
 ///|
@@ -300,9 +305,9 @@ pub fn Element::set_inner_content(
   options : ContentOptions,
 ) -> Element {
   self
-    .as_any()
-    ._call("setInnerContent", [@core.any(content), options.to_js()])
-    .cast()
+  .as_any()
+  ._call("setInnerContent", [@core.any(content), options.to_js()])
+  .cast()
 }
 
 ///|
