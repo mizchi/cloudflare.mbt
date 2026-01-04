@@ -15,7 +15,7 @@ pub async fn R2Bucket::get(
   onlyIf? : R2Conditional,
   range? : R2Range,
 ) -> R2Object? {
-  let promise : @core.Promise[R2Object?] = if onlyIf is None && range is None {
+  let promise : @core.Promise[@core.Any] = if onlyIf is None && range is None {
     self.as_any()._call("get", [@core.any(key)]).cast()
   } else {
     let onlyIf_js : @core.Any? = match onlyIf {
@@ -63,17 +63,27 @@ pub async fn R2Bucket::get(
     let opts = @core.from_entries(entries)
     self.as_any()._call("get", [@core.any(key), opts]).cast()
   }
-  promise.wait()
+  let result = promise.wait()
+  if @core.is_null(result) || @core.typeof_(result) == "undefined" {
+    None
+  } else {
+    Some(result.cast())
+  }
 }
 
 ///|
 /// Get object metadata without body
 pub async fn R2Bucket::head(self : Self, key : String) -> R2Object? {
-  let promise : @core.Promise[R2Object?] = self
+  let promise : @core.Promise[@core.Any] = self
     .as_any()
     ._call("head", [@core.any(key)])
     .cast()
-  promise.wait()
+  let result = promise.wait()
+  if @core.is_null(result) || @core.typeof_(result) == "undefined" {
+    None
+  } else {
+    Some(result.cast())
+  }
 }
 
 ///|
@@ -439,16 +449,46 @@ pub fn R2Object::write_http_metadata(self : Self, headers : @core.Any) -> Unit {
 }
 
 ///|
-/// Result of list operation
-pub(all) struct R2Objects {
-  objects : Array[R2Object]
-  truncated : Bool
-  cursor : String?
-  delimitedPrefixes : Array[String]
-}
+/// Result of list operation (external type to properly handle JS object properties)
+#external
+pub type R2Objects
 
 ///|
 pub fn R2Objects::as_any(self : R2Objects) -> @core.Any = "%identity"
+
+///|
+/// Get the objects array
+pub fn R2Objects::objects(self : R2Objects) -> Array[R2Object] {
+  self.as_any()["objects"].cast()
+}
+
+///|
+/// Check if the list is truncated
+pub fn R2Objects::truncated(self : R2Objects) -> Bool {
+  self.as_any()["truncated"].cast()
+}
+
+///|
+/// Get the cursor for pagination
+pub fn R2Objects::cursor(self : R2Objects) -> String? {
+  let c = self.as_any()["cursor"]
+  if @core.typeof_(c) == "undefined" || @core.is_null(c) {
+    None
+  } else {
+    Some(c.cast())
+  }
+}
+
+///|
+/// Get the delimited prefixes
+pub fn R2Objects::delimited_prefixes(self : R2Objects) -> Array[String] {
+  let dp = self.as_any()["delimitedPrefixes"]
+  if @core.typeof_(dp) == "undefined" || @core.is_null(dp) {
+    []
+  } else {
+    dp.cast()
+  }
+}
 
 ///|
 /// R2 Multipart Upload

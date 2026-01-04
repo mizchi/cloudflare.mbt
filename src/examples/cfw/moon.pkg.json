@@ -7,7 +7,8 @@
       "exports": [
         "get_fetch_handler",
         "get_kv_handler",
-        "get_d1_handler"
+        "get_d1_handler",
+        "get_r2_handler"
       ]
     }
   },
