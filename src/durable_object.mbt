@@ -636,6 +636,29 @@ pub fn DurableObjectSetAlarmOptions::to_js(
 }
 
 ///|
+/// Information passed to the alarm() handler
+/// Contains retry information for handling alarm failures
+#external
+pub type AlarmInfo
+
+///|
+pub fn AlarmInfo::as_any(self : AlarmInfo) -> @core.Any = "%identity"
+
+///|
+/// Get the number of times this alarm has been retried
+/// Starts at 0 for the first attempt
+pub fn AlarmInfo::retry_count(self : AlarmInfo) -> Int {
+  self.as_any()["retryCount"].cast()
+}
+
+///|
+/// Check if this alarm invocation is a retry
+/// Returns true if retryCount > 0
+pub fn AlarmInfo::is_retry(self : AlarmInfo) -> Bool {
+  self.as_any()["isRetry"].cast()
+}
+
+///|
 /// Transaction context
 #external
 pub type DurableObjectTransaction
