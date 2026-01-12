@@ -9,8 +9,7 @@
     "./miniflare/d1": "./src/miniflare/d1-test-runner.mjs"
   },
   "scripts": {
-    "dev": "wrangler dev fixtures/cf-worker.js",
-    "test": "vitest run --config vitest.cf-config.ts e2e/cloudflare/moonbit-*.test.ts"
+    "test": "moon build && vitest run"
   },
   "keywords": [
     "moonbit",
@@ -31,10 +30,8 @@
     "miniflare": "^3.20250102.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.10.11",
     "@cloudflare/workers-types": "^4.20251126.0",
-    "vitest": "^3.2.4",
-    "wrangler": "^4.51.0"
+    "vitest": "^3.2.4"
   },
   "packageManager": "pnpm@10.23.0"
 }

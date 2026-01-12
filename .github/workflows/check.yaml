@@ -28,9 +28,8 @@ jobs:
         with: 
           version: stable
       - name: moon version
-        run: |
-          moon version --all
-      - name: install module dependencies
+        run: moon version --all
+      - name: Install module dependencies
         run: |
           moon update
           moon install
@@ -41,11 +40,6 @@ jobs:
           moon info
           git diff --exit-code
       - name: moon test
-        run: |
-          moon test
-      - name: build
-        run: |
-          moon build
-      - name: pnpm test
-        run: |
-          pnpm test
+        run: moon test
+      - name: Miniflare FFI test
+        run: pnpm test
