@@ -23,10 +23,10 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: Setup Moon
-        uses: illusory0x0/setup-moonbit@v0.1.0
-        with: 
-          version: stable
+      - name: Setup MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> $GITHUB_PATH
       - name: moon version
         run: moon version --all
       - name: Install module dependencies
