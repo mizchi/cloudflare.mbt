@@ -3,11 +3,6 @@
   "version": "0.1.2",
   "type": "module",
   "description": "MoonBit bindings for Cloudflare Workers APIs",
-  "exports": {
-    ".": "./src/miniflare/index.mjs",
-    "./miniflare": "./src/miniflare/index.mjs",
-    "./miniflare/d1": "./src/miniflare/d1-test-runner.mjs"
-  },
   "scripts": {
     "test": "moon build && vitest run"
   },
