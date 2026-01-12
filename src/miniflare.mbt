@@ -18,7 +18,8 @@ pub fn get_test_d1() -> D1Database? {
 pub fn get_test_d1_exn() -> D1Database {
   match get_test_d1() {
     Some(db) => db
-    None => abort("D1 test database not available. Run tests with miniflare harness.")
+    None =>
+      abort("D1 test database not available. Run tests with miniflare harness.")
   }
 }
 
@@ -82,10 +83,14 @@ fn miniflare_options_to_js(options : MiniflareOptions) -> @core.Any {
   match options.script {
     Some(s) => entries.push(("script", @core.any(s)))
     None =>
-      entries.push((
-        "script",
-        @core.any("export default { async fetch() { return new Response(\"OK\"); } }"),
-      ))
+      entries.push(
+        (
+          "script",
+          @core.any(
+            "export default { async fetch() { return new Response(\"OK\"); } }",
+          ),
+        ),
+      )
   }
   match options.d1Databases {
     Some(dbs) => entries.push(("d1Databases", @core.any(dbs)))
@@ -154,4 +159,3 @@ pub async fn Miniflare::get_kv_namespace(
     .cast()
   promise.wait()
 }
-

@@ -9,13 +9,12 @@ export default defineWorkersConfig({
       "node_modules",
       ".mooncakes",
       "_build",
-      "e2e/cloudflare/durable-objects.test.ts",
-      "e2e/cloudflare/r2.test.ts",
+      "e2e/cloudflare/durable-objects.test.ts", // Requires separate config (vitest.do-config.ts)
+      "e2e/cloudflare/r2.test.ts", // Isolated storage issues
     ],
     poolOptions: {
       workers: {
         miniflare: {
-          // Add any Miniflare-specific options here
           kvNamespaces: ["TEST_KV", "MY_KV"],
           d1Databases: ["TEST_DB", "CMS_DB"],
           r2Buckets: ["TEST_R2", "CMS_R2"],
