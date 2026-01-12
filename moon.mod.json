@@ -1,6 +1,6 @@
 {
   "name": "mizchi/cloudflare",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "deps": {
     "moonbitlang/async": "0.16.0",
     "mizchi/js": "0.10.10"

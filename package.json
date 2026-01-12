@@ -1,6 +1,6 @@
 {
   "name": "@mizchi/cloudflare-mbt",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "type": "module",
   "description": "MoonBit bindings for Cloudflare Workers APIs",
   "scripts": {
