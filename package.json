@@ -25,6 +25,7 @@
     "miniflare": "^3.20250102.0"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.12.1",
     "@cloudflare/workers-types": "^4.20251126.0",
     "vitest": "^3.2.4"
   },

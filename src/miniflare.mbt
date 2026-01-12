@@ -61,29 +61,46 @@ pub fn MiniflareOptions::default() -> MiniflareOptions {
 }
 
 ///|
-/// Create a new Miniflare instance
-pub fn Miniflare::new(options : MiniflareOptions) -> Miniflare {
-  miniflare_new_ffi(options)
+/// Dynamic import for miniflare package (ESM)
+extern "js" fn import_miniflare() -> @core.Promise[@core.Any] =
+  #|() => import("miniflare")
+
+///|
+/// Create a new Miniflare instance (async due to ESM dynamic import)
+pub async fn Miniflare::new(options : MiniflareOptions) -> Miniflare {
+  let mod = import_miniflare().wait()
+  let klass : @core.Any = mod["Miniflare"]
+  let opts = miniflare_options_to_js(options)
+  @core.new(klass, [opts]).cast()
 }
 
 ///|
-extern "js" fn miniflare_new_ffi(options : MiniflareOptions) -> Miniflare =
-  #| (options) => {
-  #|   const Miniflare = globalThis.__miniflare_module__.Miniflare;
-  #|   // Helper to unwrap MoonBit Option type: {$tag: 0} = None, {$tag: 1, _0: value} = Some
-  #|   const unwrapOption = (opt) => opt && opt.$tag === 1 ? opt._0 : undefined;
-  #|   const opts = {
-  #|     modules: options.modules,
-  #|     script: unwrapOption(options.script) || 'export default { async fetch() { return new Response("OK"); } }',
-  #|   };
-  #|   const d1 = unwrapOption(options.d1Databases);
-  #|   const r2 = unwrapOption(options.r2Buckets);
-  #|   const kv = unwrapOption(options.kvNamespaces);
-  #|   if (d1) opts.d1Databases = d1;
-  #|   if (r2) opts.r2Buckets = r2;
-  #|   if (kv) opts.kvNamespaces = kv;
-  #|   return new Miniflare(opts);
-  #| }
+/// Convert MiniflareOptions to JS object
+fn miniflare_options_to_js(options : MiniflareOptions) -> @core.Any {
+  let entries : Array[(String, @core.Any)] = []
+  entries.push(("modules", @core.any(options.modules)))
+  match options.script {
+    Some(s) => entries.push(("script", @core.any(s)))
+    None =>
+      entries.push((
+        "script",
+        @core.any("export default { async fetch() { return new Response(\"OK\"); } }"),
+      ))
+  }
+  match options.d1Databases {
+    Some(dbs) => entries.push(("d1Databases", @core.any(dbs)))
+    None => ()
+  }
+  match options.r2Buckets {
+    Some(buckets) => entries.push(("r2Buckets", @core.any(buckets)))
+    None => ()
+  }
+  match options.kvNamespaces {
+    Some(ns) => entries.push(("kvNamespaces", @core.any(ns)))
+    None => ()
+  }
+  @core.from_entries(entries)
+}
 
 ///|
 /// Wait for Miniflare to be ready
@@ -138,13 +155,3 @@ pub async fn Miniflare::get_kv_namespace(
   promise.wait()
 }
 
-///|
-/// Setup Miniflare module before use
-/// Call this with the miniflare module import
-pub fn setup_miniflare(miniflare_module : @core.Any) -> Unit {
-  setup_miniflare_ffi(miniflare_module)
-}
-
-///|
-extern "js" fn setup_miniflare_ffi(miniflare_module : @core.Any) -> Unit =
-  #| (mod) => { globalThis.__miniflare_module__ = mod; }

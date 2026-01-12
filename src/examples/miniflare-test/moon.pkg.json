@@ -1,19 +1,10 @@
 {
-  "is_main": true,
   "supported-targets": ["js"],
   "import": [
     "mizchi/cloudflare",
     "mizchi/js/core"
   ],
-  "link": {
-    "js": {
-      "format": "esm",
-      "exports": [
-        "test_d1",
-        "test_r2",
-        "test_kv",
-        "setup_miniflare"
-      ]
-    }
-  }
+  "test-import": [
+    "moonbitlang/async"
+  ]
 }
