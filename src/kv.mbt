@@ -49,33 +49,33 @@ pub async fn KVNamespace::get_array_buffer(
   key : String,
 ) -> @core.Any? {
   let opts_js = @core.from_entries([("type", @core.any("arrayBuffer"))])
-  let promise : @core.Promise[@core.Any?] = self
+  let promise : @core.Promise[@core.Nullish[@core.Any]] = self
     .as_any()
     ._call("get", [@core.any(key), @core.any(opts_js)])
     .cast()
-  promise.wait()
+  promise.wait().to_option()
 }
 
 ///|
 /// Get a value as JSON
 pub async fn KVNamespace::get_json(self : Self, key : String) -> @core.Any? {
   let opts_js = @core.from_entries([("type", @core.any("json"))])
-  let promise : @core.Promise[@core.Any?] = self
+  let promise : @core.Promise[@core.Nullish[@core.Any]] = self
     .as_any()
     ._call("get", [@core.any(key), @core.any(opts_js)])
     .cast()
-  promise.wait()
+  promise.wait().to_option()
 }
 
 ///|
 /// Get a value as stream
 pub async fn KVNamespace::get_stream(self : Self, key : String) -> @core.Any? {
   let opts_js = @core.from_entries([("type", @core.any("stream"))])
-  let promise : @core.Promise[@core.Any?] = self
+  let promise : @core.Promise[@core.Nullish[@core.Any]] = self
     .as_any()
     ._call("get", [@core.any(key), @core.any(opts_js)])
     .cast()
-  promise.wait()
+  promise.wait().to_option()
 }
 
 ///|
