@@ -337,3 +337,41 @@ pub fn D1ExecResult::duration(self : D1ExecResult) -> Double {
 ///|
 /// Legacy type alias for compatibility
 pub type D1ResultSet = D1Result
+
+// ============================================================================
+// Type conversion utilities for D1 row data
+// ============================================================================
+
+///|
+/// Convert a JavaScript number from D1 result to MoonBit Int64
+/// D1 returns SQLite INTEGER as JavaScript numbers, but MoonBit Int64
+/// uses { hi, lo } representation in JS target.
+pub fn js_number_to_int64(value : @core.Any) -> Int64 {
+  js_number_to_int64_ffi(value)
+}
+
+///|
+extern "js" fn js_number_to_int64_ffi(value : @core.Any) -> Int64 =
+  #| (n) => {
+  #|   // JavaScript number to MoonBit Int64 ({hi, lo} representation)
+  #|   if (typeof n !== 'number') n = Number(n);
+  #|   // Handle negative numbers correctly
+  #|   if (n < 0) {
+  #|     // Two's complement for negative numbers
+  #|     const abs = Math.abs(n);
+  #|     const lo = (~(abs >>> 0) + 1) >>> 0;
+  #|     const hi = (~Math.floor(abs / 0x100000000) + (lo === 0 ? 1 : 0)) >>> 0;
+  #|     return { hi, lo };
+  #|   }
+  #|   return { hi: Math.floor(n / 0x100000000) >>> 0, lo: (n >>> 0) };
+  #| }
+
+///|
+/// Convert a JavaScript number from D1 result to MoonBit Int (32-bit)
+pub fn js_number_to_int(value : @core.Any) -> Int {
+  js_number_to_int_ffi(value)
+}
+
+///|
+extern "js" fn js_number_to_int_ffi(value : @core.Any) -> Int =
+  #| (n) => (typeof n === 'number' ? n : Number(n)) | 0
