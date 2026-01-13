@@ -21,8 +21,15 @@ pub fn D1Database::prepare(self : Self, query : String) -> D1PreparedStatement {
 ///|
 /// Execute a SQL statement directly (for statements that don't return data)
 pub async fn D1Database::exec(self : Self, query : String) -> D1ExecResult raise D1Error {
-  let promise = self.as_any()._call("exec", [@core.any(query)])
-  await_d1_exec_result(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[D1ExecResult] = self
+    .as_any()
+    ._call("exec", [@core.any(query)])
+    .cast()
+  try {
+    promise.wait()
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
@@ -37,15 +44,26 @@ pub async fn D1Database::batch(
     @core.any(stmts_js)._call("push", [@core.any(statements[i])]) |> ignore
     i = i + 1
   }
-  let promise = self.as_any()._call("batch", [@core.any(stmts_js)])
-  await_d1_result_array(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[Array[D1Result]] = self
+    .as_any()
+    ._call("batch", [@core.any(stmts_js)])
+    .cast()
+  try {
+    promise.wait()
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
 /// Dump the entire database (returns ArrayBuffer as Bytes)
 pub async fn D1Database::dump(self : Self) -> Bytes raise D1Error {
-  let promise = self.as_any()._call("dump", [])
-  await_bytes(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[Bytes] = self.as_any()._call("dump", []).cast()
+  try {
+    promise.wait()
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
@@ -110,8 +128,20 @@ pub fn D1PreparedStatement::bind3(
 ///|
 /// Execute the statement and return first row
 pub async fn D1PreparedStatement::first(self : Self) -> @core.Any? raise D1Error {
-  let promise = self.as_any()._call("first", [])
-  await_any_option(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[@core.Any] = self
+    .as_any()
+    ._call("first", [])
+    .cast()
+  try {
+    let result = promise.wait()
+    if @core.is_null(result) || @core.typeof_(result) == "undefined" {
+      None
+    } else {
+      Some(result)
+    }
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
@@ -120,22 +150,48 @@ pub async fn D1PreparedStatement::first_col(
   self : Self,
   col_name : String,
 ) -> @core.Any? raise D1Error {
-  let promise = self.as_any()._call("first", [@core.any(col_name)])
-  await_any_option(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[@core.Any] = self
+    .as_any()
+    ._call("first", [@core.any(col_name)])
+    .cast()
+  try {
+    let result = promise.wait()
+    if @core.is_null(result) || @core.typeof_(result) == "undefined" {
+      None
+    } else {
+      Some(result)
+    }
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
 /// Execute the statement and return all rows
 pub async fn D1PreparedStatement::all(self : Self) -> D1Result raise D1Error {
-  let promise = self.as_any()._call("all", [])
-  await_d1_result(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[D1Result] = self
+    .as_any()
+    ._call("all", [])
+    .cast()
+  try {
+    promise.wait()
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
 /// Execute the statement (for INSERT, UPDATE, DELETE)
 pub async fn D1PreparedStatement::run(self : Self) -> D1Result raise D1Error {
-  let promise = self.as_any()._call("run", [])
-  await_d1_result(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[D1Result] = self
+    .as_any()
+    ._call("run", [])
+    .cast()
+  try {
+    promise.wait()
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
@@ -144,7 +200,7 @@ pub async fn D1PreparedStatement::raw(
   self : Self,
   columnNames? : Bool,
 ) -> Array[@core.Any] raise D1Error {
-  let promise = if columnNames is None {
+  let promise_any = if columnNames is None {
     self.as_any()._call("raw", [])
   } else {
     let entries : Array[(String, @core.Any)] = []
@@ -154,7 +210,12 @@ pub async fn D1PreparedStatement::raw(
     let opts = @core.from_entries(entries)
     self.as_any()._call("raw", [opts])
   }
-  await_any_array(promise).unwrap_or_raise()
+  let promise : @js_async.Promise[Array[@core.Any]] = promise_any.cast()
+  try {
+    promise.wait()
+  } catch {
+    err => raise D1Error(err.to_string())
+  }
 }
 
 ///|
@@ -359,175 +420,3 @@ pub fn js_number_to_int(value : @core.Any) -> Int {
 extern "js" fn js_number_to_int_ffi(value : @core.Any) -> Int =
   #| (n) => (typeof n === 'number' ? n : Number(n)) | 0
 
-// ============================================================================
-// Error handling utilities for D1 async operations
-// ============================================================================
-
-///| Result type for D1Result async operations
-priv struct D1ResultAsync {
-  ok : D1Result?
-  err : String?
-}
-
-///|
-fn D1ResultAsync::unwrap_or_raise(self : D1ResultAsync) -> D1Result raise D1Error {
-  match self.err {
-    Some(msg) => raise D1Error(msg)
-    None => match self.ok {
-      Some(v) => v
-      None => raise D1Error("D1 operation returned null")
-    }
-  }
-}
-
-///| Result type for D1ExecResult async operations
-priv struct D1ExecResultAsync {
-  ok : D1ExecResult?
-  err : String?
-}
-
-///|
-fn D1ExecResultAsync::unwrap_or_raise(self : D1ExecResultAsync) -> D1ExecResult raise D1Error {
-  match self.err {
-    Some(msg) => raise D1Error(msg)
-    None => match self.ok {
-      Some(v) => v
-      None => raise D1Error("D1 operation returned null")
-    }
-  }
-}
-
-///| Result type for Bytes async operations
-priv struct BytesAsync {
-  ok : Bytes?
-  err : String?
-}
-
-///|
-fn BytesAsync::unwrap_or_raise(self : BytesAsync) -> Bytes raise D1Error {
-  match self.err {
-    Some(msg) => raise D1Error(msg)
-    None => match self.ok {
-      Some(v) => v
-      None => raise D1Error("D1 operation returned null")
-    }
-  }
-}
-
-///| Result type for @core.Any? async operations
-priv struct AnyOptionAsync {
-  ok : @core.Any?
-  err : String?
-  is_null : Bool
-}
-
-///|
-fn AnyOptionAsync::unwrap_or_raise(self : AnyOptionAsync) -> @core.Any? raise D1Error {
-  match self.err {
-    Some(msg) => raise D1Error(msg)
-    None => if self.is_null { None } else { self.ok }
-  }
-}
-
-///| Result type for Array[D1Result] async operations
-priv struct D1ResultArrayAsync {
-  ok : Array[D1Result]?
-  err : String?
-}
-
-///|
-fn D1ResultArrayAsync::unwrap_or_raise(self : D1ResultArrayAsync) -> Array[D1Result] raise D1Error {
-  match self.err {
-    Some(msg) => raise D1Error(msg)
-    None => match self.ok {
-      Some(v) => v
-      None => raise D1Error("D1 operation returned null")
-    }
-  }
-}
-
-///| Result type for Array[@core.Any] async operations
-priv struct AnyArrayAsync {
-  ok : Array[@core.Any]?
-  err : String?
-}
-
-///|
-fn AnyArrayAsync::unwrap_or_raise(self : AnyArrayAsync) -> Array[@core.Any] raise D1Error {
-  match self.err {
-    Some(msg) => raise D1Error(msg)
-    None => match self.ok {
-      Some(v) => v
-      None => raise D1Error("D1 operation returned null")
-    }
-  }
-}
-
-// FFI functions for awaiting with error handling
-
-///|
-extern "js" fn await_d1_result(promise : @core.Any) -> D1ResultAsync =
-  #| async (p) => {
-  #|   try {
-  #|     const result = await p;
-  #|     return { ok: result, err: undefined };
-  #|   } catch (e) {
-  #|     return { ok: undefined, err: e?.message ?? String(e) };
-  #|   }
-  #| }
-
-///|
-extern "js" fn await_d1_exec_result(promise : @core.Any) -> D1ExecResultAsync =
-  #| async (p) => {
-  #|   try {
-  #|     const result = await p;
-  #|     return { ok: result, err: undefined };
-  #|   } catch (e) {
-  #|     return { ok: undefined, err: e?.message ?? String(e) };
-  #|   }
-  #| }
-
-///|
-extern "js" fn await_bytes(promise : @core.Any) -> BytesAsync =
-  #| async (p) => {
-  #|   try {
-  #|     const result = await p;
-  #|     return { ok: result, err: undefined };
-  #|   } catch (e) {
-  #|     return { ok: undefined, err: e?.message ?? String(e) };
-  #|   }
-  #| }
-
-///|
-extern "js" fn await_any_option(promise : @core.Any) -> AnyOptionAsync =
-  #| async (p) => {
-  #|   try {
-  #|     const result = await p;
-  #|     const isNull = result === null || result === undefined;
-  #|     return { ok: isNull ? undefined : result, err: undefined, is_null: isNull };
-  #|   } catch (e) {
-  #|     return { ok: undefined, err: e?.message ?? String(e), is_null: false };
-  #|   }
-  #| }
-
-///|
-extern "js" fn await_d1_result_array(promise : @core.Any) -> D1ResultArrayAsync =
-  #| async (p) => {
-  #|   try {
-  #|     const result = await p;
-  #|     return { ok: result, err: undefined };
-  #|   } catch (e) {
-  #|     return { ok: undefined, err: e?.message ?? String(e) };
-  #|   }
-  #| }
-
-///|
-extern "js" fn await_any_array(promise : @core.Any) -> AnyArrayAsync =
-  #| async (p) => {
-  #|   try {
-  #|     const result = await p;
-  #|     return { ok: result, err: undefined };
-  #|   } catch (e) {
-  #|     return { ok: undefined, err: e?.message ?? String(e) };
-  #|   }
-  #| }

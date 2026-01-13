@@ -5,6 +5,7 @@ import {
   "mizchi/js/web/http",
   "mizchi/js/web/streams",
   "mizchi/js/builtins/arraybuffer",
+  "moonbitlang/async/js_async",
 }
 
 import "test" { "moonbitlang/async" }

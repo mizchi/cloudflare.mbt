@@ -63,7 +63,7 @@ pub fn MiniflareOptions::default() -> MiniflareOptions {
 
 ///|
 /// Dynamic import for miniflare package (ESM)
-extern "js" fn import_miniflare() -> @core.Promise[@core.Any] =
+extern "js" fn import_miniflare() -> @js_async.Promise[@core.Any] =
   #|() => import("miniflare")
 
 ///|
@@ -110,14 +110,17 @@ fn miniflare_options_to_js(options : MiniflareOptions) -> @core.Any {
 ///|
 /// Wait for Miniflare to be ready
 pub async fn Miniflare::ready(self : Miniflare) -> Unit {
-  let promise : @core.Promise[Unit] = self.as_any()["ready"].cast()
+  let promise : @js_async.Promise[Unit] = self.as_any()["ready"].cast()
   promise.wait()
 }
 
 ///|
 /// Dispose of Miniflare instance
 pub async fn Miniflare::dispose(self : Miniflare) -> Unit {
-  let promise : @core.Promise[Unit] = self.as_any()._call("dispose", []).cast()
+  let promise : @js_async.Promise[Unit] = self
+    .as_any()
+    ._call("dispose", [])
+    .cast()
   promise.wait()
 }
 
@@ -127,7 +130,7 @@ pub async fn Miniflare::get_d1_database(
   self : Miniflare,
   binding_name : String,
 ) -> D1Database {
-  let promise : @core.Promise[D1Database] = self
+  let promise : @js_async.Promise[D1Database] = self
     .as_any()
     ._call("getD1Database", [@core.any(binding_name)])
     .cast()
@@ -140,7 +143,7 @@ pub async fn Miniflare::get_r2_bucket(
   self : Miniflare,
   binding_name : String,
 ) -> R2Bucket {
-  let promise : @core.Promise[R2Bucket] = self
+  let promise : @js_async.Promise[R2Bucket] = self
     .as_any()
     ._call("getR2Bucket", [@core.any(binding_name)])
     .cast()
@@ -153,7 +156,7 @@ pub async fn Miniflare::get_kv_namespace(
   self : Miniflare,
   binding_name : String,
 ) -> KVNamespace {
-  let promise : @core.Promise[KVNamespace] = self
+  let promise : @js_async.Promise[KVNamespace] = self
     .as_any()
     ._call("getKVNamespace", [@core.any(binding_name)])
     .cast()
