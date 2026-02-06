@@ -1,0 +1,18 @@
+import {
+  "mizchi/js",
+  "mizchi/js/web/http",
+  "mizchi/js/web/url",
+  "mizchi/js/core",
+  "mizchi/cloudflare",
+}
+
+options(
+  link: {
+    "js": {
+      "exports": [
+        "get_signaling_handler",
+      ],
+    },
+  },
+  "supported-targets": [ "js" ],
+)
