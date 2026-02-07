@@ -146,3 +146,16 @@ fn cleanup_seen(now : Double) -> Unit {
 pub fn get_snapshot_json() -> @core.Any {
   relay_store.snapshot(default_namespaces)
 }
+
+///|
+/// Get filtered snapshot for specific namespaces (for Topic-filtered Star).
+/// namespaces_js is a JS Array of namespace strings.
+pub fn get_filtered_snapshot_json(namespaces_js : @core.Any) -> @core.Any {
+  let len : Int = namespaces_js["length"].cast()
+  let namespaces : Array[String] = []
+  for i in 0..<len {
+    let ns : String = namespaces_js[i.to_string()].cast()
+    namespaces.push(ns)
+  }
+  relay_store.snapshot(namespaces)
+}
