@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/cloudflare/examples/signaling"
+
+import {
+  "mizchi/cloudflare",
+  "mizchi/js/core",
+  "mizchi/js/web/http",
+}
+
+// Values
+pub fn get_filtered_snapshot_json(@core.Any) -> @core.Any
+
+pub fn get_signaling_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.CloudflareEnv, @cloudflare.CloudflareContext) -> @core.Promise[@http.Response]
+
+pub fn get_snapshot_json() -> @core.Any
+
+pub fn gossip_merge(@core.Any, String) -> @core.Any?
+
+pub fn star_merge(@core.Any) -> @core.Any
+
+// Errors
+
+// Types and methods
+pub(all) struct LwwEntry {
+  value : @core.Any
+  timestamp : Double
+  peer : String
+}
+
+pub(all) struct LwwStore {
+  data : Map[String, Map[String, LwwEntry]]
+}
+pub fn LwwStore::merge_entry(Self, String, String, LwwEntry) -> Bool
+pub fn LwwStore::merge_json(Self, @core.Any) -> @core.Any
+pub fn LwwStore::new() -> Self
+pub fn LwwStore::set(Self, String, String, @core.Any, Double, String) -> Unit
+pub fn LwwStore::snapshot(Self, Array[String]) -> @core.Any
+
+// Type aliases
+
+// Traits
+

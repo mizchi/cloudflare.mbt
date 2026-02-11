@@ -44,14 +44,13 @@ pub fn get_signaling_handler() -> @cloudflare.CloudflareFetchHandler {
   let async_handler = async fn(
     req : @cloudflare.CloudflareRequest,
     env : @cloudflare.CloudflareEnv,
-    _ctx : @cloudflare.CloudflareContext
+    _ctx : @cloudflare.CloudflareContext,
   ) -> Response {
     let url = URL::new(req.url)
     let pathname = url.pathname
     if pathname == "/" {
       Response::html(
-        "<h1>Signaling Relay</h1><p>Connect via WebSocket at /ws</p>",
-        200,
+        "<h1>Signaling Relay</h1><p>Connect via WebSocket at /ws</p>", 200,
       )
     } else if pathname == "/api/info" {
       let data = @core.new_object()
@@ -72,9 +71,7 @@ pub fn get_signaling_handler() -> @cloudflare.CloudflareFetchHandler {
         Some(r) => r
         None => "main"
       }
-      let do_ns : @cloudflare.DurableObjectNamespace = env
-        .as_any()["SIGNALING_RELAY"]
-        .cast()
+      let do_ns : @cloudflare.DurableObjectNamespace = env.as_any()["SIGNALING_RELAY"].cast()
       let stub = do_ns.get_by_name(room)
       let response = stub.fetch(@core.any(req))
       response.cast()
@@ -101,10 +98,7 @@ pub fn star_merge(entries_js : @core.Any) -> @core.Any {
 
 ///|
 /// Returns changed entries if msgId not seen, None otherwise.
-pub fn gossip_merge(
-  entries_js : @core.Any,
-  msg_id : String
-) -> @core.Any? {
+pub fn gossip_merge(entries_js : @core.Any, msg_id : String) -> @core.Any? {
   let now = get_timestamp()
   // Check dedup
   match seen_messages.get(msg_id) {
@@ -125,7 +119,11 @@ pub fn gossip_merge(
   // Merge
   let changed = relay_store.merge_json(entries_js)
   let has_changes = @core.object_keys(changed).length() > 0
-  if has_changes { Some(changed) } else { None }
+  if has_changes {
+    Some(changed)
+  } else {
+    None
+  }
 }
 
 ///|

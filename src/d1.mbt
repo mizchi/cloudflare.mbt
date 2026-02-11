@@ -1,6 +1,7 @@
 // Cloudflare D1 Database bindings
 
-///| D1 Error type for database operations
+///|
+/// D1 Error type for database operations
 pub suberror D1Error {
   D1Error(String)
 } derive(Show)
@@ -20,14 +21,15 @@ pub fn D1Database::prepare(self : Self, query : String) -> D1PreparedStatement {
 
 ///|
 /// Execute a SQL statement directly (for statements that don't return data)
-pub async fn D1Database::exec(self : Self, query : String) -> D1ExecResult raise D1Error {
+pub async fn D1Database::exec(
+  self : Self,
+  query : String,
+) -> D1ExecResult raise D1Error {
   let promise : @js_async.Promise[D1ExecResult] = self
     .as_any()
     ._call("exec", [@core.any(query)])
     .cast()
-  try {
-    promise.wait()
-  } catch {
+  promise.wait() catch {
     err => raise D1Error(err.to_string())
   }
 }
@@ -48,9 +50,7 @@ pub async fn D1Database::batch(
     .as_any()
     ._call("batch", [@core.any(stmts_js)])
     .cast()
-  try {
-    promise.wait()
-  } catch {
+  promise.wait() catch {
     err => raise D1Error(err.to_string())
   }
 }
@@ -58,10 +58,11 @@ pub async fn D1Database::batch(
 ///|
 /// Dump the entire database (returns ArrayBuffer as Bytes)
 pub async fn D1Database::dump(self : Self) -> Bytes raise D1Error {
-  let promise : @js_async.Promise[Bytes] = self.as_any()._call("dump", []).cast()
-  try {
-    promise.wait()
-  } catch {
+  let promise : @js_async.Promise[Bytes] = self
+    .as_any()
+    ._call("dump", [])
+    .cast()
+  promise.wait() catch {
     err => raise D1Error(err.to_string())
   }
 }
@@ -127,7 +128,9 @@ pub fn D1PreparedStatement::bind3(
 
 ///|
 /// Execute the statement and return first row
-pub async fn D1PreparedStatement::first(self : Self) -> @core.Any? raise D1Error {
+pub async fn D1PreparedStatement::first(
+  self : Self,
+) -> @core.Any? raise D1Error {
   let promise : @js_async.Promise[@core.Any] = self
     .as_any()
     ._call("first", [])
@@ -173,9 +176,7 @@ pub async fn D1PreparedStatement::all(self : Self) -> D1Result raise D1Error {
     .as_any()
     ._call("all", [])
     .cast()
-  try {
-    promise.wait()
-  } catch {
+  promise.wait() catch {
     err => raise D1Error(err.to_string())
   }
 }
@@ -187,9 +188,7 @@ pub async fn D1PreparedStatement::run(self : Self) -> D1Result raise D1Error {
     .as_any()
     ._call("run", [])
     .cast()
-  try {
-    promise.wait()
-  } catch {
+  promise.wait() catch {
     err => raise D1Error(err.to_string())
   }
 }
@@ -211,9 +210,7 @@ pub async fn D1PreparedStatement::raw(
     self.as_any()._call("raw", [opts])
   }
   let promise : @js_async.Promise[Array[@core.Any]] = promise_any.cast()
-  try {
-    promise.wait()
-  } catch {
+  promise.wait() catch {
     err => raise D1Error(err.to_string())
   }
 }
@@ -419,4 +416,3 @@ pub fn js_number_to_int(value : @core.Any) -> Int {
 ///|
 extern "js" fn js_number_to_int_ffi(value : @core.Any) -> Int =
   #| (n) => (typeof n === 'number' ? n : Number(n)) | 0
-

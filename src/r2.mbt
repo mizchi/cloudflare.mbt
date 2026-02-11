@@ -15,7 +15,8 @@ pub async fn R2Bucket::get(
   onlyIf? : R2Conditional,
   range? : R2Range,
 ) -> R2Object? {
-  let promise : @js_async.Promise[@core.Any] = if onlyIf is None && range is None {
+  let promise : @js_async.Promise[@core.Any] = if onlyIf is None &&
+    range is None {
     self.as_any()._call("get", [@core.any(key)]).cast()
   } else {
     let onlyIf_js : @core.Any? = match onlyIf {
@@ -406,7 +407,10 @@ pub async fn R2Object::array_buffer(self : Self) -> @arraybuffer.ArrayBuffer {
 ///|
 /// Get object body as text
 pub async fn R2Object::text(self : Self) -> String {
-  let promise : @js_async.Promise[String] = self.as_any()._call("text", []).cast()
+  let promise : @js_async.Promise[String] = self
+    .as_any()
+    ._call("text", [])
+    .cast()
   promise.wait()
 }
 
@@ -527,7 +531,10 @@ pub async fn R2MultipartUpload::upload_part(
 ///|
 /// Abort the multipart upload
 pub async fn R2MultipartUpload::abort(self : Self) -> Unit {
-  let promise : @js_async.Promise[Unit] = self.as_any()._call("abort", []).cast()
+  let promise : @js_async.Promise[Unit] = self
+    .as_any()
+    ._call("abort", [])
+    .cast()
   promise.wait()
 }
 

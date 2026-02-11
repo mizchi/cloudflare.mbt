@@ -21,7 +21,7 @@ pub fn LwwStore::new() -> LwwStore {
 ///|
 fn LwwStore::get_or_create_ns(
   self : LwwStore,
-  ns : String
+  ns : String,
 ) -> Map[String, LwwEntry] {
   match self.data.get(ns) {
     Some(m) => m
@@ -40,7 +40,7 @@ pub fn LwwStore::set(
   key : String,
   value : @core.Any,
   timestamp : Double,
-  peer : String
+  peer : String,
 ) -> Unit {
   let ns_map = self.get_or_create_ns(ns)
   ns_map[key] = { value, timestamp, peer }
@@ -53,7 +53,7 @@ pub fn LwwStore::merge_entry(
   self : LwwStore,
   ns : String,
   key : String,
-  remote : LwwEntry
+  remote : LwwEntry,
 ) -> Bool {
   let ns_map = self.get_or_create_ns(ns)
   match ns_map.get(key) {
@@ -61,7 +61,7 @@ pub fn LwwStore::merge_entry(
       ns_map[key] = remote
       true
     }
-    Some(current) => {
+    Some(current) =>
       if remote.timestamp > current.timestamp {
         ns_map[key] = remote
         true
@@ -72,7 +72,6 @@ pub fn LwwStore::merge_entry(
       } else {
         false
       }
-    }
   }
 }
 
@@ -81,7 +80,7 @@ pub fn LwwStore::merge_entry(
 /// Input format: { ns: { key: { value, timestamp, peer } } }
 pub fn LwwStore::merge_json(
   self : LwwStore,
-  entries_js : @core.Any
+  entries_js : @core.Any,
 ) -> @core.Any {
   let changed = @core.new_object()
   let ns_keys = @core.object_keys(entries_js)
@@ -115,7 +114,7 @@ pub fn LwwStore::merge_json(
 /// Get snapshot of specified namespaces as JS object
 pub fn LwwStore::snapshot(
   self : LwwStore,
-  namespaces : Array[String]
+  namespaces : Array[String],
 ) -> @core.Any {
   let result = @core.new_object()
   for ns in namespaces {

@@ -8,7 +8,9 @@ import {
   "moonbitlang/async/js_async",
 }
 
-import "test" { "moonbitlang/async" }
+import {
+  "moonbitlang/async",
+} for "test"
 
 options(
   "supported-targets": [ "js" ],

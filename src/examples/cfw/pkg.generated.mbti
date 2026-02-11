@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/cloudflare/examples/cfw"
+
+import {
+  "mizchi/cloudflare",
+  "mizchi/js/core",
+  "mizchi/js/web/http",
+}
+
+// Values
+pub fn get_cms_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.CloudflareEnv, @cloudflare.CloudflareContext) -> @core.Promise[@http.Response]
+
+pub fn get_d1_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.CloudflareEnv, @cloudflare.CloudflareContext) -> @core.Promise[@http.Response]
+
+pub fn get_fetch_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.CloudflareEnv, @cloudflare.CloudflareContext) -> @core.Promise[@http.Response]
+
+pub fn get_html_rewriter_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.CloudflareEnv, @cloudflare.CloudflareContext) -> @core.Promise[@http.Response]
+
+pub fn get_kv_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.CloudflareEnv, @cloudflare.CloudflareContext) -> @core.Promise[@http.Response]
+
+pub fn get_r2_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.CloudflareEnv, @cloudflare.CloudflareContext) -> @core.Promise[@http.Response]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+
