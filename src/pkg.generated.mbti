@@ -31,6 +31,12 @@ pub impl Show for D1Error
 
 // Types and methods
 #external
+pub type AI
+pub fn AI::as_any(Self) -> @core.Any
+pub async fn AI::run(Self, String, @core.Any) -> @core.Any
+pub async fn AI::run_with_options(Self, String, @core.Any, @core.Any) -> @core.Any
+
+#external
 pub type AlarmInfo
 pub fn AlarmInfo::as_any(Self) -> @core.Any
 pub fn AlarmInfo::is_retry(Self) -> Bool
@@ -48,8 +54,10 @@ pub fn CloudflareContext::waitUntil(Self, @core.Promise[Unit]) -> Unit
 pub type CloudflareEnv
 pub fn CloudflareEnv::as_any(Self) -> @core.Any
 pub fn CloudflareEnv::get(Self, String) -> @core.Any?
+pub fn CloudflareEnv::get_ai_binding(Self, String) -> AI?
 pub fn CloudflareEnv::get_durable_object_namespace(Self, String) -> DurableObjectNamespace?
 pub fn CloudflareEnv::get_rate_limit_binding(Self, String) -> RateLimitBinding?
+pub fn CloudflareEnv::get_workflow_binding(Self, String) -> Workflow?
 
 pub(all) struct CloudflareRequest {
   cf : CloudflareContext

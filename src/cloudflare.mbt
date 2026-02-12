@@ -44,6 +44,27 @@ pub fn CloudflareEnv::get_rate_limit_binding(
 }
 
 ///|
+/// Read an AI binding by key.
+pub fn CloudflareEnv::get_ai_binding(self : CloudflareEnv, key : String) -> AI? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
+/// Read a Workflow binding by key.
+pub fn CloudflareEnv::get_workflow_binding(
+  self : CloudflareEnv,
+  key : String,
+) -> Workflow? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
 #external
 pub type CloudflareContext
 
