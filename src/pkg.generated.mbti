@@ -47,12 +47,19 @@ pub fn CloudflareContext::waitUntil(Self, @core.Promise[Unit]) -> Unit
 #external
 pub type CloudflareEnv
 pub fn CloudflareEnv::as_any(Self) -> @core.Any
+pub fn CloudflareEnv::get(Self, String) -> @core.Any?
+pub fn CloudflareEnv::get_durable_object_namespace(Self, String) -> DurableObjectNamespace?
+pub fn CloudflareEnv::get_rate_limit_binding(Self, String) -> RateLimitBinding?
 
 pub(all) struct CloudflareRequest {
   cf : CloudflareContext
   url : String
 }
 pub fn CloudflareRequest::as_any(Self) -> @core.Any
+pub fn CloudflareRequest::get_url(Self) -> String
+pub fn CloudflareRequest::header(Self, String) -> String?
+pub fn CloudflareRequest::headers(Self) -> @http.Headers
+pub fn CloudflareRequest::method_(Self) -> String
 
 pub(all) struct ContentOptions {
   html : Bool
@@ -465,6 +472,17 @@ pub(all) struct R2UploadedPart {
   etag : String
 }
 pub fn R2UploadedPart::as_any(Self) -> @core.Any
+
+#external
+pub type RateLimitBinding
+pub fn RateLimitBinding::as_any(Self) -> @core.Any
+pub async fn RateLimitBinding::limit(Self, String) -> Bool
+
+pub(all) struct RateLimitResult {
+  success : Bool
+}
+pub fn RateLimitResult::as_any(Self) -> @core.Any
+pub fn RateLimitResult::success(Self) -> Bool
 
 #external
 pub type SqlStorage

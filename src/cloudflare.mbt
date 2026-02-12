@@ -8,6 +8,42 @@ pub type CloudflareEnv
 pub fn CloudflareEnv::as_any(self : CloudflareEnv) -> @core.Any = "%identity"
 
 ///|
+/// Read an environment binding by key.
+/// Returns `None` for missing/undefined/null bindings.
+pub fn CloudflareEnv::get(self : CloudflareEnv, key : String) -> @core.Any? {
+  let value = self.as_any()[key]
+  if @core.typeof_(value) == "undefined" || @core.is_null(value) {
+    None
+  } else {
+    Some(value)
+  }
+}
+
+///|
+/// Read a Durable Object namespace binding by key.
+pub fn CloudflareEnv::get_durable_object_namespace(
+  self : CloudflareEnv,
+  key : String,
+) -> DurableObjectNamespace? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
+/// Read a Rate Limiter binding by key.
+pub fn CloudflareEnv::get_rate_limit_binding(
+  self : CloudflareEnv,
+  key : String,
+) -> RateLimitBinding? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
 #external
 pub type CloudflareContext
 
@@ -39,6 +75,29 @@ pub(all) struct CloudflareRequest {
 
 ///|
 pub fn CloudflareRequest::as_any(self : CloudflareRequest) -> @core.Any = "%identity"
+
+///|
+pub fn CloudflareRequest::get_url(self : CloudflareRequest) -> String {
+  self.as_any()["url"].cast()
+}
+
+///|
+pub fn CloudflareRequest::method_(self : CloudflareRequest) -> String {
+  self.as_any()["method"].cast()
+}
+
+///|
+pub fn CloudflareRequest::headers(self : CloudflareRequest) -> @http.Headers {
+  self.as_any()["headers"].cast()
+}
+
+///|
+pub fn CloudflareRequest::header(
+  self : CloudflareRequest,
+  name : String,
+) -> String? {
+  self.headers().as_any()._call("get", [@core.any(name)]) |> @core.identity_option
+}
 
 ///|
 /// CloudflareFetchHandler is a type alias for Cloudflare Worker fetch handler
