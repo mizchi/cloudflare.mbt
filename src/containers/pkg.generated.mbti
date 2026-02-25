@@ -1,0 +1,41 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/cloudflare/containers"
+
+import {
+  "mizchi/js/core",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+#external
+pub type Container
+pub fn Container::as_any(Self) -> @core.Any
+pub async fn Container::container_fetch(Self, @core.Any, Int) -> @core.Any
+pub async fn Container::exec(Self, String, options? : @core.Any) -> @core.Any
+pub async fn Container::list_processes(Self) -> Array[ContainerProcess]
+pub async fn Container::start_process(Self, String, options? : @core.Any) -> ContainerProcess
+pub async fn Container::ws_connect(Self, @core.Any, Int) -> @core.Any
+
+#external
+pub type ContainerProcess
+pub fn ContainerProcess::as_any(Self) -> @core.Any
+pub fn ContainerProcess::command(Self) -> String
+pub async fn ContainerProcess::get_logs(Self) -> @core.Any
+pub fn ContainerProcess::id(Self) -> String
+pub async fn ContainerProcess::kill(Self) -> Unit
+pub fn ContainerProcess::status(Self) -> String
+pub async fn ContainerProcess::wait_for_port(Self, Int, WaitForPortOptions) -> Unit
+
+pub(all) struct WaitForPortOptions {
+  mode : String?
+  timeout : Int?
+}
+pub fn WaitForPortOptions::to_js(Self) -> @core.Any
+
+// Type aliases
+
+// Traits
+

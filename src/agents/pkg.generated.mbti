@@ -1,0 +1,74 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/cloudflare/agents"
+
+import {
+  "mizchi/cloudflare",
+  "mizchi/js/core",
+  "mizchi/js/web/http",
+}
+
+// Values
+pub async fn get_agent_by_name(@cloudflare.DurableObjectNamespace, String, options? : AgentLookupOptions) -> @cloudflare.DurableObjectStub
+
+pub async fn route_agent_email(@core.Any, @core.Any, options? : @core.Any) -> Unit
+
+pub async fn route_agent_request(@http.Request, @core.Any, options? : @core.Any) -> @http.Response?
+
+// Errors
+
+// Types and methods
+#external
+pub type Agent
+pub async fn Agent::alarm(Self) -> Unit
+pub fn Agent::as_any(Self) -> @core.Any
+pub async fn Agent::cancel_schedule(Self, String) -> Bool
+pub async fn Agent::destroy(Self) -> Unit
+pub async fn Agent::get_schedule(Self, String) -> AgentSchedule?
+pub fn Agent::get_schedules(Self, criteria? : AgentScheduleCriteria) -> Array[AgentSchedule]
+pub async fn Agent::schedule(Self, @core.Any, String, @core.Any) -> AgentSchedule
+pub async fn Agent::schedule_cron(Self, String, String, @core.Any) -> AgentSchedule
+pub async fn Agent::schedule_in(Self, Int, String, @core.Any) -> AgentSchedule
+pub fn Agent::set_state(Self, @core.Any) -> Unit
+pub fn Agent::state(Self) -> @core.Any?
+
+pub(all) struct AgentLookupOptions {
+  jurisdiction : String?
+  locationHint : String?
+}
+pub fn AgentLookupOptions::default() -> Self
+pub fn AgentLookupOptions::to_js(Self) -> @core.Any
+
+#external
+pub type AgentSchedule
+pub fn AgentSchedule::as_any(Self) -> @core.Any
+pub fn AgentSchedule::callback(Self) -> String
+pub fn AgentSchedule::cron(Self) -> String?
+pub fn AgentSchedule::delay_in_seconds(Self) -> Int?
+pub fn AgentSchedule::id(Self) -> String
+pub fn AgentSchedule::payload(Self) -> @core.Any
+pub fn AgentSchedule::time(Self) -> Int
+pub fn AgentSchedule::type_(Self) -> String
+
+pub(all) struct AgentScheduleCriteria {
+  description : String?
+  id : String?
+  type_ : String?
+  startTime : Int?
+  endTime : Int?
+}
+pub fn AgentScheduleCriteria::default() -> Self
+pub fn AgentScheduleCriteria::to_js(Self) -> @core.Any
+
+#external
+pub type WorkflowEntrypoint
+pub fn WorkflowEntrypoint::as_any(Self) -> @core.Any
+
+// Type aliases
+pub using @cloudflare {type DurableObjectState as AgentContext}
+
+pub using @cloudflare {type DurableObjectNamespace as AgentNamespace}
+
+pub using @cloudflare {type DurableObjectStub as AgentStub}
+
+// Traits
+

@@ -24,10 +24,16 @@ pub fn RateLimitResult::success(self : RateLimitResult) -> Bool {
 ///|
 /// Apply rate limit with a key.
 /// Returns `true` when request is allowed.
-pub async fn RateLimitBinding::limit(self : RateLimitBinding, key : String) -> Bool {
+pub async fn RateLimitBinding::limit(
+  self : RateLimitBinding,
+  key : String,
+) -> Bool {
   let payload = @core.new_object()
   payload["key"] = @core.any(key)
-  let promise : @core.Promise[@core.Any] = self.as_any()._call("limit", [payload]).cast()
+  let promise : @core.Promise[@core.Any] = self
+    .as_any()
+    ._call("limit", [payload])
+    .cast()
   let raw = promise.wait()
   if @core.typeof_(raw) == "undefined" || @core.is_null(raw) {
     false

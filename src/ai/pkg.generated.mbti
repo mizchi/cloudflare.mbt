@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/cloudflare/ai"
+
+import {
+  "mizchi/js/core",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+#external
+pub type Ai
+pub fn Ai::as_any(Self) -> @core.Any
+pub fn Ai::get_logs(Self) -> Array[String]
+pub fn Ai::last_request_id(Self) -> String?
+pub async fn Ai::new(@core.Any, options? : AiOptions) -> Self
+pub async fn Ai::run(Self, String, @core.Any) -> @core.Any
+
+pub(all) struct AiOptions {
+  debug : Bool?
+  prefix : String?
+  extraHeaders : @core.Any?
+  overrideSettings : @core.Any?
+  fetchUrl : String?
+}
+pub fn AiOptions::default() -> Self
+pub fn AiOptions::to_js(Self) -> @core.Any
+
+// Type aliases
+
+// Traits
+

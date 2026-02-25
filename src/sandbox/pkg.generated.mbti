@@ -1,0 +1,33 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/cloudflare/sandbox"
+
+import {
+  "mizchi/cloudflare",
+  "mizchi/js/core",
+  "mizchi/js/web/http",
+}
+
+// Values
+pub async fn get_sandbox(@cloudflare.DurableObjectNamespace, String, options? : @core.Any) -> SandboxSdk
+
+pub async fn proxy_to_sandbox(@http.Request, @core.Any) -> @http.Response?
+
+// Errors
+
+// Types and methods
+#external
+pub type SandboxSdk
+pub fn SandboxSdk::as_any(Self) -> @core.Any
+pub async fn SandboxSdk::exec(Self, String, options? : @core.Any) -> @core.Any
+pub async fn SandboxSdk::expose_port(Self, Int, @core.Any) -> @core.Any
+pub async fn SandboxSdk::fetch_path(Self, String, options? : @core.Any) -> @http.Response
+pub async fn SandboxSdk::fetch_request(Self, @http.Request) -> @http.Response
+pub async fn SandboxSdk::list_processes(Self) -> Array[@core.Any]
+pub async fn SandboxSdk::read_file(Self, String, options? : @core.Any) -> @core.Any
+pub async fn SandboxSdk::unexpose_port(Self, Int) -> Unit
+pub async fn SandboxSdk::write_file(Self, String, String, options? : @core.Any) -> @core.Any
+
+// Type aliases
+
+// Traits
+

@@ -65,6 +65,32 @@ pub fn CloudflareEnv::get_workflow_binding(
 }
 
 ///|
+/// Read a Sandbox (Container) namespace binding by key.
+pub fn CloudflareEnv::get_sandbox_namespace(
+  self : CloudflareEnv,
+  key : String,
+) -> DurableObjectNamespace? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
+/// Read an env var as String.
+pub fn CloudflareEnv::get_string(self : CloudflareEnv, key : String) -> String? {
+  match self.get(key) {
+    Some(value) =>
+      if @core.typeof_(value) == "string" {
+        Some(value.cast())
+      } else {
+        None
+      }
+    None => None
+  }
+}
+
+///|
 #external
 pub type CloudflareContext
 
@@ -117,7 +143,8 @@ pub fn CloudflareRequest::header(
   self : CloudflareRequest,
   name : String,
 ) -> String? {
-  self.headers().as_any()._call("get", [@core.any(name)]) |> @core.identity_option
+  self.headers().as_any()._call("get", [@core.any(name)])
+  |> @core.identity_option
 }
 
 ///|

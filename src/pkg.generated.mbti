@@ -57,6 +57,8 @@ pub fn CloudflareEnv::get(Self, String) -> @core.Any?
 pub fn CloudflareEnv::get_ai_binding(Self, String) -> AI?
 pub fn CloudflareEnv::get_durable_object_namespace(Self, String) -> DurableObjectNamespace?
 pub fn CloudflareEnv::get_rate_limit_binding(Self, String) -> RateLimitBinding?
+pub fn CloudflareEnv::get_sandbox_namespace(Self, String) -> DurableObjectNamespace?
+pub fn CloudflareEnv::get_string(Self, String) -> String?
 pub fn CloudflareEnv::get_workflow_binding(Self, String) -> Workflow?
 
 pub(all) struct CloudflareRequest {
