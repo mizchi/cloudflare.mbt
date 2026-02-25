@@ -15,7 +15,7 @@ extern "js" fn install_queue_stub() -> Unit =
   #| }
 
 ///|
-extern "js" fn make_queue_stub() -> Queue =
+extern "js" fn make_queue_stub() -> @cloudflare.Queue =
   #| () => ({
   #|   send: async (message, options) => {
   #|     const calls = globalThis.__moonbit_queue_calls__;
@@ -32,7 +32,7 @@ extern "js" fn make_queue_stub() -> Queue =
   #| })
 
 ///|
-extern "js" fn make_queue_message_batch_stub() -> QueueMessageBatch =
+extern "js" fn make_queue_message_batch_stub() -> @cloudflare.QueueMessageBatch =
   #| () => {
   #|   const calls = globalThis.__moonbit_queue_calls__;
   #|   const message = {
@@ -107,7 +107,7 @@ extern "js" fn install_analytics_stub() -> Unit =
   #| }
 
 ///|
-extern "js" fn make_analytics_dataset_stub() -> AnalyticsEngineDataset =
+extern "js" fn make_analytics_dataset_stub() -> @cloudflare.AnalyticsEngineDataset =
   #| () => ({
   #|   writeDataPoint: (event) => {
   #|     const calls = globalThis.__moonbit_analytics_calls__;
@@ -135,7 +135,7 @@ extern "js" fn analytics_blobs_length() -> Int =
   #| () => globalThis.__moonbit_analytics_calls__.blobsLength
 
 ///|
-extern "js" fn make_hyperdrive_stub() -> Hyperdrive =
+extern "js" fn make_hyperdrive_stub() -> @cloudflare.Hyperdrive =
   #| () => ({
   #|   connect: () => ({ kind: "socket", address: "hd.internal:5432" }),
   #|   connectionString: "postgres://user:pass@hd.internal:5432/app",
@@ -159,7 +159,7 @@ extern "js" fn install_email_stub() -> Unit =
   #| }
 
 ///|
-extern "js" fn make_send_email_stub() -> SendEmail =
+extern "js" fn make_send_email_stub() -> @cloudflare.SendEmail =
   #| () => ({
   #|   send: async (message) => {
   #|     const calls = globalThis.__moonbit_email_calls__;
@@ -169,7 +169,7 @@ extern "js" fn make_send_email_stub() -> SendEmail =
   #| })
 
 ///|
-extern "js" fn make_forwardable_email_message_stub() -> ForwardableEmailMessage =
+extern "js" fn make_forwardable_email_message_stub() -> @cloudflare.ForwardableEmailMessage =
   #| () => ({
   #|   from: "sender@example.com",
   #|   to: "worker@example.com",
@@ -208,7 +208,7 @@ extern "js" fn email_last_reply_to() -> String =
   #| () => globalThis.__moonbit_email_calls__.replyTo
 
 ///|
-extern "js" fn make_browser_fetcher_stub() -> BrowserFetcher =
+extern "js" fn make_browser_fetcher_stub() -> @cloudflare.BrowserFetcher =
   #| () => ({
   #|   fetch: async (input, _init) => {
   #|     if (typeof input === "string") {
@@ -220,7 +220,7 @@ extern "js" fn make_browser_fetcher_stub() -> BrowserFetcher =
   #| })
 
 ///|
-extern "js" fn make_access_request_stub() -> CloudflareRequest =
+extern "js" fn make_access_request_stub() -> @cloudflare.CloudflareRequest =
   #| () => {
   #|   const req = new Request("https://example.com/private", {
   #|     headers: {
@@ -278,11 +278,17 @@ extern "js" fn read_string(obj : @core.Any, key : String) -> String =
   #| (obj, key) => String(obj?.[key] ?? "")
 
 ///|
+async fn missing_services_stabilize_async_test() -> Unit {
+  @async.pause()
+}
+
+///|
 async test "queues bindings" {
+  missing_services_stabilize_async_test()
   install_queue_stub()
   let queue = make_queue_stub()
-  let send_options = QueueSendOptions::{
-    contentType: Some(QueueContentType::Json),
+  let send_options = @cloudflare.QueueSendOptions::{
+    contentType: Some(@cloudflare.QueueContentType::Json),
     delaySeconds: Some(5),
   }
   queue.send(@core.any("hello"), options=send_options)
@@ -290,17 +296,19 @@ async test "queues bindings" {
   assert_eq(queue_last_send_content_type(), "json")
   assert_eq(queue_last_send_delay(), 5)
 
-  let m1 = MessageSendRequest::{
+  let m1 = @cloudflare.MessageSendRequest::{
     body: @core.any("a"),
-    contentType: Some(QueueContentType::Text),
+    contentType: Some(@cloudflare.QueueContentType::Text),
     delaySeconds: None,
   }
-  let m2 = MessageSendRequest::{
+  let m2 = @cloudflare.MessageSendRequest::{
     body: @core.any("b"),
     contentType: None,
     delaySeconds: Some(2),
   }
-  let batch_options = QueueSendBatchOptions::{ delaySeconds: Some(7) }
+  let batch_options = @cloudflare.QueueSendBatchOptions::{
+    delaySeconds: Some(7),
+  }
   queue.send_batch([m1, m2], options=batch_options)
   assert_eq(queue_last_batch_count(), 2)
   assert_eq(queue_last_batch_delay(), 7)
@@ -329,7 +337,7 @@ test "analytics engine bindings" {
   dataset.write_data_point()
   assert_true(not(analytics_has_event()))
 
-  let point = AnalyticsEngineDataPoint::{
+  let point = @cloudflare.AnalyticsEngineDataPoint::{
     indexes: Some([@core.any("idx-1")]),
     doubles: Some([1.5, 2.5]),
     blobs: Some([@core.any("blob-1")]),
@@ -359,9 +367,10 @@ test "hyperdrive bindings" {
 
 ///|
 async test "email workers bindings" {
+  missing_services_stabilize_async_test()
   install_email_stub()
   let sender = make_send_email_stub()
-  let outgoing = EmailMessage::new(
+  let outgoing = @cloudflare.EmailMessage::new(
     "from@example.com",
     "to@example.com",
     @core.any("raw-message"),
@@ -386,6 +395,7 @@ async test "email workers bindings" {
 
 ///|
 async test "browser rendering bindings" {
+  missing_services_stabilize_async_test()
   let fetcher = make_browser_fetcher_stub()
   let from_url = fetcher.fetch_url("https://example.com/session")
   assert_eq(response_status(from_url), 207)
@@ -407,20 +417,21 @@ test "access helpers" {
   assert_eq(request.access_authenticated_user_id(), Some("user-1"))
   assert_true(request.tls_client_auth() is Some(_))
   assert_eq(
-    access_jwt_assertion_from_headers(request.headers()),
+    @cloudflare.access_jwt_assertion_from_headers(request.headers()),
     Some("jwt-token"),
   )
 }
 
 ///|
 async test "turnstile helper" {
+  missing_services_stabilize_async_test()
   install_turnstile_capture()
   let fetch_stub = make_turnstile_fetch_stub()
-  let options = TurnstileVerifyOptions::{
+  let options = @cloudflare.TurnstileVerifyOptions::{
     remoteIp: Some("203.0.113.1"),
     idempotencyKey: Some("idem-1"),
   }
-  let result = verify_turnstile_token_with_fetch(
+  let result = @cloudflare.verify_turnstile_token_with_fetch(
     fetch_stub,
     "secret-key",
     "token-value",
