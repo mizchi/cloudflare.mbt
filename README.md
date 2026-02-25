@@ -9,6 +9,13 @@ MoonBit bindings for Cloudflare Workers APIs
 - **R2**: Object storage
 - **Durable Objects**: Stateful serverless objects
 - **Queues**: Message queues
+- **Workers AI / AI SDK**: Model inference and SDK wrapper
+- **Analytics Engine**: Analytics data points
+- **Hyperdrive**: Database acceleration binding
+- **Email Workers**: Send/forward/reply email APIs
+- **Browser Rendering**: Fetcher/connect binding
+- **Access Helpers**: Access headers and TLS client auth helpers
+- **Turnstile**: Siteverify helper
 
 ## Installation
 

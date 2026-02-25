@@ -15,22 +15,20 @@ This package provides type-safe MoonBit bindings for Cloudflare Workers platform
 | R2 (Object Storage) | `mizchi/js/cloudflare` | 🧪 Tested | Objects/Multipart/Metadata |
 | Durable Objects | `mizchi/js/cloudflare` | 🧪 Tested | Storage/Alarms/State |
 | **Compute & Network** |
-| Workers AI | - | 📅 Planned | AI model inference |
-| Vectorize | - | 📅 Planned | Vector database |
-| Queues | `mizchi/js/cloudflare` | 🤖 AI Generated | Message queues |
-| Workers Analytics Engine | - | 📅 Planned | Analytics data |
-| Hyperdrive | - | 📅 Planned | Database acceleration |
-| Email Workers | - | 📅 Planned | Email handling |
-| Browser Rendering | - | 📅 Planned | Puppeteer API |
+| Workers AI | `mizchi/cloudflare`, `mizchi/cloudflare/ai` | 🧪 Tested | AI binding + AI SDK wrapper |
+| Vectorize | `mizchi/cloudflare` | 🧪 Tested | Vector index operations |
+| Queues | `mizchi/cloudflare` | 🧪 Tested | Producer + consumer batch APIs |
+| Workers Analytics Engine | `mizchi/cloudflare` | 🧪 Tested | `writeDataPoint` |
+| Hyperdrive | `mizchi/cloudflare` | 🧪 Tested | Connect + connection metadata |
+| Email Workers | `mizchi/cloudflare` | 🧪 Tested | Send/forward/reply APIs |
+| Browser Rendering | `mizchi/cloudflare` | 🧪 Tested | Fetcher/connect bindings |
 | **Security & Auth** |
-| Access | - | 📅 Planned | Identity management |
-| Turnstile | - | 📅 Planned | CAPTCHA alternative |
+| Access | `mizchi/cloudflare` | 🧪 Tested | Access header + TLS auth helpers |
+| Turnstile | `mizchi/cloudflare` | 🧪 Tested | Siteverify helper |
 
 ### Status Legend
 
-- 🧪 **Tested**: Comprehensive test coverage with Miniflare/Vitest
-- 🤖 **AI Generated**: FFI bindings created, needs testing
-- 📅 **Planned**: Scheduled for future implementation
+- 🧪 **Tested**: MoonBit unit tests / Miniflare tests are available
 
 ---
 

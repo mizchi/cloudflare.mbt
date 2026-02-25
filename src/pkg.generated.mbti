@@ -11,6 +11,12 @@ import {
 }
 
 // Values
+pub fn access_authenticated_user_email_from_headers(@http.Headers) -> String?
+
+pub fn access_authenticated_user_id_from_headers(@http.Headers) -> String?
+
+pub fn access_jwt_assertion_from_headers(@http.Headers) -> String?
+
 pub fn get_test_d1() -> D1Database?
 
 pub fn get_test_d1_exn() -> D1Database
@@ -22,6 +28,10 @@ pub fn js_number_to_int64(@core.Any) -> Int64
 pub fn non_retryable_error(String) -> @core.Any
 
 pub fn non_retryable_error_with_name(String, String) -> @core.Any
+
+pub async fn verify_turnstile_token(String, String, options? : TurnstileVerifyOptions, endpoint? : String) -> TurnstileVerifyResult
+
+pub async fn verify_turnstile_token_with_fetch(@core.Any, String, String, options? : TurnstileVerifyOptions, endpoint? : String) -> TurnstileVerifyResult
 
 // Errors
 pub suberror D1Error {
@@ -42,6 +52,27 @@ pub fn AlarmInfo::as_any(Self) -> @core.Any
 pub fn AlarmInfo::is_retry(Self) -> Bool
 pub fn AlarmInfo::retry_count(Self) -> Int
 
+pub(all) struct AnalyticsEngineDataPoint {
+  indexes : Array[@core.Any]?
+  doubles : Array[Double]?
+  blobs : Array[@core.Any]?
+}
+pub fn AnalyticsEngineDataPoint::default() -> Self
+pub fn AnalyticsEngineDataPoint::to_js(Self) -> @core.Any
+
+#external
+pub type AnalyticsEngineDataset
+pub fn AnalyticsEngineDataset::as_any(Self) -> @core.Any
+pub fn AnalyticsEngineDataset::write_data_point(Self, event? : AnalyticsEngineDataPoint) -> Unit
+
+#external
+pub type BrowserFetcher
+pub fn BrowserFetcher::as_any(Self) -> @core.Any
+pub fn BrowserFetcher::connect(Self, String, options? : @core.Any) -> @core.Any
+pub async fn BrowserFetcher::fetch(Self, @core.Any, init? : @core.Any) -> @http.Response
+pub async fn BrowserFetcher::fetch_request(Self, @http.Request, init? : @core.Any) -> @http.Response
+pub async fn BrowserFetcher::fetch_url(Self, String, init? : @core.Any) -> @http.Response
+
 #external
 pub type CloudflareContext
 pub fn CloudflareContext::as_any(Self) -> @core.Any
@@ -55,9 +86,14 @@ pub type CloudflareEnv
 pub fn CloudflareEnv::as_any(Self) -> @core.Any
 pub fn CloudflareEnv::get(Self, String) -> @core.Any?
 pub fn CloudflareEnv::get_ai_binding(Self, String) -> AI?
+pub fn CloudflareEnv::get_analytics_engine_binding(Self, String) -> AnalyticsEngineDataset?
+pub fn CloudflareEnv::get_browser_fetcher_binding(Self, String) -> BrowserFetcher?
 pub fn CloudflareEnv::get_durable_object_namespace(Self, String) -> DurableObjectNamespace?
+pub fn CloudflareEnv::get_hyperdrive_binding(Self, String) -> Hyperdrive?
+pub fn CloudflareEnv::get_queue_binding(Self, String) -> Queue?
 pub fn CloudflareEnv::get_rate_limit_binding(Self, String) -> RateLimitBinding?
 pub fn CloudflareEnv::get_sandbox_namespace(Self, String) -> DurableObjectNamespace?
+pub fn CloudflareEnv::get_send_email_binding(Self, String) -> SendEmail?
 pub fn CloudflareEnv::get_string(Self, String) -> String?
 pub fn CloudflareEnv::get_workflow_binding(Self, String) -> Workflow?
 
@@ -65,11 +101,15 @@ pub(all) struct CloudflareRequest {
   cf : CloudflareContext
   url : String
 }
+pub fn CloudflareRequest::access_authenticated_user_email(Self) -> String?
+pub fn CloudflareRequest::access_authenticated_user_id(Self) -> String?
+pub fn CloudflareRequest::access_jwt_assertion(Self) -> String?
 pub fn CloudflareRequest::as_any(Self) -> @core.Any
 pub fn CloudflareRequest::get_url(Self) -> String
 pub fn CloudflareRequest::header(Self, String) -> String?
 pub fn CloudflareRequest::headers(Self) -> @http.Headers
 pub fn CloudflareRequest::method_(Self) -> String
+pub fn CloudflareRequest::tls_client_auth(Self) -> @core.Any?
 
 pub(all) struct ContentOptions {
   html : Bool
@@ -308,6 +348,17 @@ pub fn ElementHandler::text_only((TextChunk) -> Unit) -> Self
 pub fn ElementHandler::to_js(Self) -> @core.Any
 
 #external
+pub type EmailMessage
+pub fn EmailMessage::as_any(Self) -> @core.Any
+pub fn EmailMessage::from(Self) -> String
+pub fn EmailMessage::headers(Self) -> @http.Headers?
+pub fn EmailMessage::message_id(Self) -> String?
+pub fn EmailMessage::new(String, String, @core.Any) -> Self
+pub fn EmailMessage::raw(Self) -> @core.Any?
+pub fn EmailMessage::raw_size(Self) -> Int?
+pub fn EmailMessage::to_(Self) -> String
+
+#external
 pub type EndTag
 pub fn EndTag::after(Self, String, ContentOptions) -> Self
 pub fn EndTag::after_text(Self, String) -> Self
@@ -317,6 +368,19 @@ pub fn EndTag::before_text(Self, String) -> Self
 pub fn EndTag::name(Self) -> String
 pub fn EndTag::remove(Self) -> Self
 pub fn EndTag::set_name(Self, String) -> Unit
+
+#external
+pub type ForwardableEmailMessage
+pub fn ForwardableEmailMessage::as_any(Self) -> @core.Any
+pub async fn ForwardableEmailMessage::forward(Self, String, headers? : @http.Headers) -> Unit
+pub fn ForwardableEmailMessage::from(Self) -> String
+pub fn ForwardableEmailMessage::headers(Self) -> @http.Headers?
+pub fn ForwardableEmailMessage::raw(Self) -> @core.Any?
+pub fn ForwardableEmailMessage::raw_size(Self) -> Int
+pub async fn ForwardableEmailMessage::reply(Self, EmailMessage) -> Unit
+pub fn ForwardableEmailMessage::set_reject(Self, String) -> Unit
+pub fn ForwardableEmailMessage::to_(Self) -> String
+pub fn ForwardableEmailMessage::to_email_message(Self) -> EmailMessage
 
 #external
 pub type HTMLComment
@@ -339,6 +403,17 @@ pub fn HTMLRewriter::new() -> Self
 pub fn HTMLRewriter::on(Self, String, ElementHandler) -> Self
 pub fn HTMLRewriter::on_document(Self, DocumentHandler) -> Self
 pub fn HTMLRewriter::transform(Self, @http.Response) -> @http.Response
+
+#external
+pub type Hyperdrive
+pub fn Hyperdrive::as_any(Self) -> @core.Any
+pub fn Hyperdrive::connect(Self) -> @core.Any
+pub fn Hyperdrive::connection_string(Self) -> String
+pub fn Hyperdrive::database(Self) -> String
+pub fn Hyperdrive::host(Self) -> String
+pub fn Hyperdrive::password(Self) -> String
+pub fn Hyperdrive::port(Self) -> Int
+pub fn Hyperdrive::user(Self) -> String
 
 #external
 pub type InstanceStatus
@@ -388,6 +463,13 @@ pub(all) struct KVValueWithMetadata {
 }
 pub fn KVValueWithMetadata::as_any(Self) -> @core.Any
 
+pub(all) struct MessageSendRequest {
+  body : @core.Any
+  contentType : QueueContentType?
+  delaySeconds : Int?
+}
+pub fn MessageSendRequest::to_js(Self) -> @core.Any
+
 #external
 pub type Miniflare
 pub fn Miniflare::as_any(Self) -> @core.Any
@@ -406,6 +488,62 @@ pub(all) struct MiniflareOptions {
   kvNamespaces : Array[String]?
 }
 pub fn MiniflareOptions::default() -> Self
+
+#external
+pub type Queue
+pub fn Queue::as_any(Self) -> @core.Any
+pub async fn Queue::send(Self, @core.Any, options? : QueueSendOptions) -> Unit
+pub async fn Queue::send_batch(Self, Array[MessageSendRequest], options? : QueueSendBatchOptions) -> Unit
+
+pub(all) enum QueueContentType {
+  Text
+  Bytes
+  Json
+  V8
+}
+pub fn QueueContentType::to_string(Self) -> String
+
+#external
+pub type QueueEvent
+pub fn QueueEvent::ack_all(Self) -> Unit
+pub fn QueueEvent::as_any(Self) -> @core.Any
+pub fn QueueEvent::messages(Self) -> Array[QueueMessage]
+pub fn QueueEvent::queue(Self) -> String
+pub fn QueueEvent::retry_all(Self, options? : QueueRetryOptions) -> Unit
+
+#external
+pub type QueueMessage
+pub fn QueueMessage::ack(Self) -> Unit
+pub fn QueueMessage::as_any(Self) -> @core.Any
+pub fn QueueMessage::attempts(Self) -> Int
+pub fn QueueMessage::body(Self) -> @core.Any
+pub fn QueueMessage::id(Self) -> String
+pub fn QueueMessage::retry(Self, options? : QueueRetryOptions) -> Unit
+pub fn QueueMessage::timestamp(Self) -> @date.Date
+
+#external
+pub type QueueMessageBatch
+pub fn QueueMessageBatch::ack_all(Self) -> Unit
+pub fn QueueMessageBatch::as_any(Self) -> @core.Any
+pub fn QueueMessageBatch::messages(Self) -> Array[QueueMessage]
+pub fn QueueMessageBatch::queue(Self) -> String
+pub fn QueueMessageBatch::retry_all(Self, options? : QueueRetryOptions) -> Unit
+
+pub(all) struct QueueRetryOptions {
+  delaySeconds : Int?
+}
+pub fn QueueRetryOptions::to_js(Self) -> @core.Any
+
+pub(all) struct QueueSendBatchOptions {
+  delaySeconds : Int?
+}
+pub fn QueueSendBatchOptions::to_js(Self) -> @core.Any
+
+pub(all) struct QueueSendOptions {
+  contentType : QueueContentType?
+  delaySeconds : Int?
+}
+pub fn QueueSendOptions::to_js(Self) -> @core.Any
 
 #external
 pub type R2Bucket
@@ -495,6 +633,11 @@ pub fn RateLimitResult::as_any(Self) -> @core.Any
 pub fn RateLimitResult::success(Self) -> Bool
 
 #external
+pub type SendEmail
+pub fn SendEmail::as_any(Self) -> @core.Any
+pub async fn SendEmail::send(Self, EmailMessage) -> Unit
+
+#external
 pub type SqlStorage
 pub fn SqlStorage::as_any(Self) -> @core.Any
 pub fn SqlStorage::database_size(Self) -> Int
@@ -534,6 +677,24 @@ pub fn TextChunk::removed(Self) -> Bool
 pub fn TextChunk::replace(Self, String, ContentOptions) -> Self
 pub fn TextChunk::replace_text(Self, String) -> Self
 pub fn TextChunk::text(Self) -> String
+
+pub(all) struct TurnstileVerifyOptions {
+  remoteIp : String?
+  idempotencyKey : String?
+}
+pub fn TurnstileVerifyOptions::default() -> Self
+pub fn TurnstileVerifyOptions::idempotency_key_js(Self) -> @core.Any
+pub fn TurnstileVerifyOptions::remote_ip_js(Self) -> @core.Any
+
+#external
+pub type TurnstileVerifyResult
+pub fn TurnstileVerifyResult::action(Self) -> String?
+pub fn TurnstileVerifyResult::as_any(Self) -> @core.Any
+pub fn TurnstileVerifyResult::cdata(Self) -> String?
+pub fn TurnstileVerifyResult::challenge_ts(Self) -> String?
+pub fn TurnstileVerifyResult::error_codes(Self) -> Array[String]
+pub fn TurnstileVerifyResult::hostname(Self) -> String?
+pub fn TurnstileVerifyResult::success(Self) -> Bool
 
 #external
 pub type VectorizeIndex

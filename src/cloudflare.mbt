@@ -77,6 +77,66 @@ pub fn CloudflareEnv::get_sandbox_namespace(
 }
 
 ///|
+/// Read a Queue binding by key.
+pub fn CloudflareEnv::get_queue_binding(
+  self : CloudflareEnv,
+  key : String,
+) -> Queue? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
+/// Read an Analytics Engine dataset binding by key.
+pub fn CloudflareEnv::get_analytics_engine_binding(
+  self : CloudflareEnv,
+  key : String,
+) -> AnalyticsEngineDataset? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
+/// Read a Hyperdrive binding by key.
+pub fn CloudflareEnv::get_hyperdrive_binding(
+  self : CloudflareEnv,
+  key : String,
+) -> Hyperdrive? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
+/// Read a Send Email binding by key.
+pub fn CloudflareEnv::get_send_email_binding(
+  self : CloudflareEnv,
+  key : String,
+) -> SendEmail? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
+/// Read a Browser Fetcher binding by key.
+pub fn CloudflareEnv::get_browser_fetcher_binding(
+  self : CloudflareEnv,
+  key : String,
+) -> BrowserFetcher? {
+  match self.get(key) {
+    Some(value) => Some(value.cast())
+    None => None
+  }
+}
+
+///|
 /// Read an env var as String.
 pub fn CloudflareEnv::get_string(self : CloudflareEnv, key : String) -> String? {
   match self.get(key) {
