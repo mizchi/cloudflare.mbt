@@ -1,6 +1,6 @@
 name = "mizchi/cloudflare"
 
-version = "0.1.10"
+version = "0.1.11"
 
 import {
   "moonbitlang/async@0.20.5",
