@@ -71,4 +71,3 @@ pub using @cloudflare {type DurableObjectNamespace as AgentNamespace}
 pub using @cloudflare {type DurableObjectStub as AgentStub}
 
 // Traits
-

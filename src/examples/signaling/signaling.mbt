@@ -32,7 +32,7 @@ extern "js" fn get_timestamp() -> Double =
 let relay_store : LwwStore = LwwStore::new()
 
 ///|
-let seen_messages : Map[String, Double] = Map::new()
+let seen_messages : Map[String, Double] = Map([])
 
 ///|
 let seen_ttl_ms : Double = 30000.0

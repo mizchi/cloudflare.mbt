@@ -10,6 +10,7 @@ import {
 }
 
 supported_targets = "js"
+
 options(
   link: {
     "js": {

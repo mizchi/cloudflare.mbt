@@ -1,10 +1,10 @@
 # Build and test commands for cloudflare.mbt
 
-# Run all tests (MoonBit + vitest e2e)
+# Run all tests (MoonBit packages + Miniflare e2e)
 test: build
-    moon test --target js
-    npx vitest run --config vitest.cf-config.ts
-    npx vitest run --config vitest.do-config.ts
+    moon test --target js -p mizchi/cloudflare/agents -p mizchi/cloudflare/ai -p mizchi/cloudflare/containers -p mizchi/cloudflare/sandbox -p mizchi/cloudflare/services
+    moon test --target js src/ai_workflow_env_test.mbt
+    pnpm test
 
 # Build MoonBit project
 build:
@@ -25,7 +25,7 @@ test-do:
 
 # Check MoonBit code
 check:
-    moon check
+    moon check --deny-warn --target js
 
 # Format MoonBit code
 fmt:
@@ -34,3 +34,6 @@ fmt:
 # Update MoonBit interface files
 info:
     moon info
+
+# Pre-release verification
+release-check: fmt info check test

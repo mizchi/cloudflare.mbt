@@ -38,4 +38,3 @@ pub fn WaitForPortOptions::to_js(Self) -> @core.Any
 // Type aliases
 
 // Traits
-

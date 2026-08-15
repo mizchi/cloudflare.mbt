@@ -7,11 +7,11 @@ pub suberror D1Error {
 }
 
 ///|
-pub impl Show for D1Error with output(self, logger) {
+pub impl Show for D1Error with fn output(self, logger) {
   match self {
     D1Error(msg) => {
       logger.write_string("D1Error(")
-      msg.output(logger)
+      logger.write_string(msg)
       logger.write_string(")")
     }
   }
