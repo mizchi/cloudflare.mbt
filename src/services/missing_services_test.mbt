@@ -335,7 +335,7 @@ test "analytics engine bindings" {
   install_analytics_stub()
   let dataset = make_analytics_dataset_stub()
   dataset.write_data_point()
-  assert_true(not(analytics_has_event()))
+  assert_true(!analytics_has_event())
 
   let point = @cloudflare.AnalyticsEngineDataPoint::{
     indexes: Some([@core.any("idx-1")]),

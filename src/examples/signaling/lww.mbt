@@ -15,7 +15,7 @@ pub(all) struct LwwStore {
 
 ///|
 pub fn LwwStore::new() -> LwwStore {
-  { data: Map::new() }
+  { data: Map([]) }
 }
 
 ///|
@@ -26,7 +26,7 @@ fn LwwStore::get_or_create_ns(
   match self.data.get(ns) {
     Some(m) => m
     None => {
-      let m : Map[String, LwwEntry] = Map::new()
+      let m : Map[String, LwwEntry] = Map([])
       self.data[ns] = m
       m
     }

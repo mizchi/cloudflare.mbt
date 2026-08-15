@@ -6,7 +6,8 @@ import {
   "mizchi/cloudflare",
 }
 
+supported_targets = "js"
+
 options(
   link: { "js": { "exports": [ "get_signaling_handler" ] } },
-  "supported-targets": [ "js" ],
 )

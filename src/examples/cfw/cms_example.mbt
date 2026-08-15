@@ -168,7 +168,7 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
 
     // Single article operations
     if pathname.has_prefix("/cms/articles/") {
-      let slug = pathname[14:].to_string() // Remove "/cms/articles/"
+      let slug = pathname[14:].to_owned() // Remove "/cms/articles/"
       if req_method == "GET" {
         // Get single article
         let stmt = db
@@ -287,7 +287,7 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
     }
     if pathname.has_prefix("/cms/images/") && req_method == "GET" {
       // Get image
-      let key = pathname[12:].to_string() // Remove "/cms/images/"
+      let key = pathname[12:].to_owned() // Remove "/cms/images/"
       let obj = r2.get(key) catch {
         e =>
           return cms_json_response("{\"error\":\"" + e.to_string() + "\"}", 500)
@@ -302,7 +302,7 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
     }
     if pathname.has_prefix("/cms/images/") && req_method == "DELETE" {
       // Delete image
-      let key = pathname[12:].to_string()
+      let key = pathname[12:].to_owned()
       r2.delete(key) catch {
         _ =>
           return cms_json_response(
@@ -314,7 +314,7 @@ pub fn get_cms_handler() -> @cloudflare.CloudflareFetchHandler {
 
     // Render article with HTMLRewriter
     if pathname.has_prefix("/cms/render/") && req_method == "GET" {
-      let slug = pathname[12:].to_string()
+      let slug = pathname[12:].to_owned()
 
       // Get article from D1
       let stmt = db

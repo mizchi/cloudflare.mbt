@@ -9,6 +9,8 @@ import {
   "mizchi/js/core",
 }
 
+supported_targets = "js"
+
 options(
   link: {
     "js": {
@@ -22,5 +24,4 @@ options(
       ],
     },
   },
-  "supported-targets": [ "js" ],
 )

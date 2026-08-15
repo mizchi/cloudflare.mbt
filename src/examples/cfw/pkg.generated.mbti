@@ -27,4 +27,3 @@ pub fn get_r2_handler() -> (@cloudflare.CloudflareRequest, @cloudflare.Cloudflar
 // Type aliases
 
 // Traits
-

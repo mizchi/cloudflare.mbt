@@ -851,4 +851,3 @@ pub fn WorkflowStepConfig::with_timeout(String) -> Self
 pub type CloudflareFetchHandler = (CloudflareRequest, CloudflareEnv, CloudflareContext) -> @core.Promise[@http.Response]
 
 // Traits
-

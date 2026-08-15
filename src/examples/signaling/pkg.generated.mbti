@@ -39,4 +39,3 @@ pub fn LwwStore::snapshot(Self, Array[String]) -> @core.Any
 // Type aliases
 
 // Traits
-
