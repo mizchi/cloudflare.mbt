@@ -118,7 +118,7 @@ pub fn TurnstileVerifyResult::error_codes(
   self : TurnstileVerifyResult,
 ) -> Array[String] {
   let value_hyphen = self.as_any()["error-codes"]
-  if not(turnstile_is_js_nullish(value_hyphen)) {
+  if !turnstile_is_js_nullish(value_hyphen) {
     value_hyphen.cast()
   } else {
     let value_snake = self.as_any()["error_codes"]

@@ -4,7 +4,18 @@
 /// D1 Error type for database operations
 pub suberror D1Error {
   D1Error(String)
-} derive(Show)
+}
+
+///|
+pub impl Show for D1Error with output(self, logger) {
+  match self {
+    D1Error(msg) => {
+      logger.write_string("D1Error(")
+      msg.output(logger)
+      logger.write_string(")")
+    }
+  }
+}
 
 ///|
 #external
