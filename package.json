@@ -22,12 +22,12 @@
     "url": "https://github.com/mizchi/cloudflare.mbt"
   },
   "dependencies": {
-    "miniflare": "^3.20250102.0"
+    "miniflare": "^4.20260730.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.12.1",
-    "@cloudflare/workers-types": "^4.20251126.0",
-    "vitest": "^3.2.4"
+    "@cloudflare/vitest-pool-workers": "^0.21.3",
+    "@cloudflare/workers-types": "^5.20260815.1",
+    "vitest": "^4.1.10"
   },
   "packageManager": "pnpm@10.23.0"
 }
