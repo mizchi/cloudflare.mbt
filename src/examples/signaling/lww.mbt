@@ -15,7 +15,7 @@ pub(all) struct LwwStore {
 
 ///|
 pub fn LwwStore::new() -> LwwStore {
-  { data: Map([]) }
+  { data: Map([]), }
 }
 
 ///|
@@ -43,7 +43,7 @@ pub fn LwwStore::set(
   peer : String,
 ) -> Unit {
   let ns_map = self.get_or_create_ns(ns)
-  ns_map[key] = { value, timestamp, peer }
+  ns_map[key] = { value, timestamp, peer, }
 }
 
 ///|

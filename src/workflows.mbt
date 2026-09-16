@@ -110,7 +110,7 @@ pub fn WorkflowInstanceCreateOptions::to_js(
 pub fn WorkflowInstanceCreateOptions::with_id(
   id : String,
 ) -> WorkflowInstanceCreateOptions {
-  { id: Some(id), params: None }
+  { id: Some(id), params: None, }
 }
 
 ///|
@@ -119,7 +119,7 @@ pub fn WorkflowInstanceCreateOptions::with_id_and_params(
   id : String,
   params : @core.Any,
 ) -> WorkflowInstanceCreateOptions {
-  { id: Some(id), params: Some(params) }
+  { id: Some(id), params: Some(params), }
 }
 
 ///|
@@ -127,7 +127,7 @@ pub fn WorkflowInstanceCreateOptions::with_id_and_params(
 pub fn WorkflowInstanceCreateOptions::with_params(
   params : @core.Any,
 ) -> WorkflowInstanceCreateOptions {
-  { id: None, params: Some(params) }
+  { id: None, params: Some(params), }
 }
 
 ///|
@@ -427,7 +427,7 @@ pub fn WaitForEventOptions::to_js(self : WaitForEventOptions) -> @core.Any {
 ///|
 /// Create wait options with just event type
 pub fn WaitForEventOptions::new(event : String) -> WaitForEventOptions {
-  { event, timeout: None }
+  { event, timeout: None, }
 }
 
 ///|
@@ -436,7 +436,7 @@ pub fn WaitForEventOptions::with_timeout(
   event : String,
   timeout : String,
 ) -> WaitForEventOptions {
-  { event, timeout: Some(timeout) }
+  { event, timeout: Some(timeout), }
 }
 
 ///|
@@ -495,7 +495,7 @@ pub fn WorkflowStepConfig::to_js(self : WorkflowStepConfig) -> @core.Any {
 ///|
 /// Create step config with just timeout
 pub fn WorkflowStepConfig::with_timeout(timeout : String) -> WorkflowStepConfig {
-  { retries: None, timeout: Some(timeout) }
+  { retries: None, timeout: Some(timeout), }
 }
 
 ///|
@@ -503,7 +503,7 @@ pub fn WorkflowStepConfig::with_timeout(timeout : String) -> WorkflowStepConfig 
 pub fn WorkflowStepConfig::with_retries(
   retries : WorkflowRetryConfig,
 ) -> WorkflowStepConfig {
-  { retries: Some(retries), timeout: None }
+  { retries: Some(retries), timeout: None, }
 }
 
 ///|
@@ -512,7 +512,7 @@ pub fn WorkflowStepConfig::new(
   retries : WorkflowRetryConfig,
   timeout : String,
 ) -> WorkflowStepConfig {
-  { retries: Some(retries), timeout: Some(timeout) }
+  { retries: Some(retries), timeout: Some(timeout), }
 }
 
 ///|
@@ -539,7 +539,7 @@ pub fn WorkflowRetryConfig::constant(
   limit : Int,
   delay : String,
 ) -> WorkflowRetryConfig {
-  { limit, delay, backoff: "constant" }
+  { limit, delay, backoff: "constant", }
 }
 
 ///|
@@ -548,7 +548,7 @@ pub fn WorkflowRetryConfig::exponential(
   limit : Int,
   delay : String,
 ) -> WorkflowRetryConfig {
-  { limit, delay, backoff: "exponential" }
+  { limit, delay, backoff: "exponential", }
 }
 
 // ============================================

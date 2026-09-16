@@ -2,12 +2,12 @@
 package "mizchi/cloudflare"
 
 import {
-  "mizchi/js/builtins/arraybuffer",
-  "mizchi/js/builtins/date",
-  "mizchi/js/core",
-  "mizchi/js/web/blob",
-  "mizchi/js/web/http",
-  "mizchi/js/web/streams",
+  "mizchi/js_builtin/arraybuffer",
+  "mizchi/js_builtin/date",
+  "mizchi/js_core",
+  "mizchi/js_web/blob",
+  "mizchi/js_web/http",
+  "mizchi/js_web/streams",
 }
 
 // Values
@@ -21,17 +21,17 @@ pub fn get_test_d1() -> D1Database?
 
 pub fn get_test_d1_exn() -> D1Database
 
-pub fn js_number_to_int(@core.Any) -> Int
+pub fn js_number_to_int(@js_core.Any) -> Int
 
-pub fn js_number_to_int64(@core.Any) -> Int64
+pub fn js_number_to_int64(@js_core.Any) -> Int64
 
-pub fn non_retryable_error(String) -> @core.Any
+pub fn non_retryable_error(String) -> @js_core.Any
 
-pub fn non_retryable_error_with_name(String, String) -> @core.Any
+pub fn non_retryable_error_with_name(String, String) -> @js_core.Any
 
 pub async fn verify_turnstile_token(String, String, options? : TurnstileVerifyOptions, endpoint? : String) -> TurnstileVerifyResult
 
-pub async fn verify_turnstile_token_with_fetch(@core.Any, String, String, options? : TurnstileVerifyOptions, endpoint? : String) -> TurnstileVerifyResult
+pub async fn verify_turnstile_token_with_fetch(@js_core.Any, String, String, options? : TurnstileVerifyOptions, endpoint? : String) -> TurnstileVerifyResult
 
 // Errors
 pub suberror D1Error {
@@ -42,49 +42,49 @@ pub impl Show for D1Error
 // Types and methods
 #external
 pub type AI
-pub fn AI::as_any(Self) -> @core.Any
-pub async fn AI::run(Self, String, @core.Any) -> @core.Any
-pub async fn AI::run_with_options(Self, String, @core.Any, @core.Any) -> @core.Any
+pub fn AI::as_any(Self) -> @js_core.Any
+pub async fn AI::run(Self, String, @js_core.Any) -> @js_core.Any
+pub async fn AI::run_with_options(Self, String, @js_core.Any, @js_core.Any) -> @js_core.Any
 
 #external
 pub type AlarmInfo
-pub fn AlarmInfo::as_any(Self) -> @core.Any
+pub fn AlarmInfo::as_any(Self) -> @js_core.Any
 pub fn AlarmInfo::is_retry(Self) -> Bool
 pub fn AlarmInfo::retry_count(Self) -> Int
 
 pub(all) struct AnalyticsEngineDataPoint {
-  indexes : Array[@core.Any]?
+  indexes : Array[@js_core.Any]?
   doubles : Array[Double]?
-  blobs : Array[@core.Any]?
+  blobs : Array[@js_core.Any]?
 }
 pub fn AnalyticsEngineDataPoint::default() -> Self
-pub fn AnalyticsEngineDataPoint::to_js(Self) -> @core.Any
+pub fn AnalyticsEngineDataPoint::to_js(Self) -> @js_core.Any
 
 #external
 pub type AnalyticsEngineDataset
-pub fn AnalyticsEngineDataset::as_any(Self) -> @core.Any
+pub fn AnalyticsEngineDataset::as_any(Self) -> @js_core.Any
 pub fn AnalyticsEngineDataset::write_data_point(Self, event? : AnalyticsEngineDataPoint) -> Unit
 
 #external
 pub type BrowserFetcher
-pub fn BrowserFetcher::as_any(Self) -> @core.Any
-pub fn BrowserFetcher::connect(Self, String, options? : @core.Any) -> @core.Any
-pub async fn BrowserFetcher::fetch(Self, @core.Any, init? : @core.Any) -> @http.Response
-pub async fn BrowserFetcher::fetch_request(Self, @http.Request, init? : @core.Any) -> @http.Response
-pub async fn BrowserFetcher::fetch_url(Self, String, init? : @core.Any) -> @http.Response
+pub fn BrowserFetcher::as_any(Self) -> @js_core.Any
+pub fn BrowserFetcher::connect(Self, String, options? : @js_core.Any) -> @js_core.Any
+pub async fn BrowserFetcher::fetch(Self, @js_core.Any, init? : @js_core.Any) -> @http.Response
+pub async fn BrowserFetcher::fetch_request(Self, @http.Request, init? : @js_core.Any) -> @http.Response
+pub async fn BrowserFetcher::fetch_url(Self, String, init? : @js_core.Any) -> @http.Response
 
 #external
 pub type CloudflareContext
-pub fn CloudflareContext::as_any(Self) -> @core.Any
+pub fn CloudflareContext::as_any(Self) -> @js_core.Any
 #alias(pass_through_exception)
 pub fn CloudflareContext::passThroughOnException(Self) -> Unit
 #alias(wait_until)
-pub fn CloudflareContext::waitUntil(Self, @core.Promise[Unit]) -> Unit
+pub fn CloudflareContext::waitUntil(Self, @js_core.Promise[Unit]) -> Unit
 
 #external
 pub type CloudflareEnv
-pub fn CloudflareEnv::as_any(Self) -> @core.Any
-pub fn CloudflareEnv::get(Self, String) -> @core.Any?
+pub fn CloudflareEnv::as_any(Self) -> @js_core.Any
+pub fn CloudflareEnv::get(Self, String) -> @js_core.Any?
 pub fn CloudflareEnv::get_ai_binding(Self, String) -> AI?
 pub fn CloudflareEnv::get_analytics_engine_binding(Self, String) -> AnalyticsEngineDataset?
 pub fn CloudflareEnv::get_browser_fetcher_binding(Self, String) -> BrowserFetcher?
@@ -104,23 +104,23 @@ pub(all) struct CloudflareRequest {
 pub fn CloudflareRequest::access_authenticated_user_email(Self) -> String?
 pub fn CloudflareRequest::access_authenticated_user_id(Self) -> String?
 pub fn CloudflareRequest::access_jwt_assertion(Self) -> String?
-pub fn CloudflareRequest::as_any(Self) -> @core.Any
+pub fn CloudflareRequest::as_any(Self) -> @js_core.Any
 pub fn CloudflareRequest::get_url(Self) -> String
 pub fn CloudflareRequest::header(Self, String) -> String?
 pub fn CloudflareRequest::headers(Self) -> @http.Headers
 pub fn CloudflareRequest::method_(Self) -> String
-pub fn CloudflareRequest::tls_client_auth(Self) -> @core.Any?
+pub fn CloudflareRequest::tls_client_auth(Self) -> @js_core.Any?
 
 pub(all) struct ContentOptions {
   html : Bool
 }
 pub fn ContentOptions::html_mode() -> Self
 pub fn ContentOptions::text() -> Self
-pub fn ContentOptions::to_js(Self) -> @core.Any
+pub fn ContentOptions::to_js(Self) -> @js_core.Any
 
 #external
 pub type D1Database
-pub fn D1Database::as_any(Self) -> @core.Any
+pub fn D1Database::as_any(Self) -> @js_core.Any
 pub async fn D1Database::batch(Self, Array[D1PreparedStatement]) -> Array[D1Result] raise D1Error
 pub async fn D1Database::dump(Self) -> Bytes raise D1Error
 pub async fn D1Database::exec(Self, String) -> D1ExecResult raise D1Error
@@ -128,13 +128,13 @@ pub fn D1Database::prepare(Self, String) -> D1PreparedStatement
 
 #external
 pub type D1ExecResult
-pub fn D1ExecResult::as_any(Self) -> @core.Any
+pub fn D1ExecResult::as_any(Self) -> @js_core.Any
 pub fn D1ExecResult::count(Self) -> Int
 pub fn D1ExecResult::duration(Self) -> Double
 
 #external
 pub type D1Meta
-pub fn D1Meta::as_any(Self) -> @core.Any
+pub fn D1Meta::as_any(Self) -> @js_core.Any
 pub fn D1Meta::changed_db(Self) -> Bool?
 pub fn D1Meta::changes(Self) -> Int?
 pub fn D1Meta::duration(Self) -> Double?
@@ -146,29 +146,29 @@ pub fn D1Meta::size_after(Self) -> Int?
 #external
 pub type D1PreparedStatement
 pub async fn D1PreparedStatement::all(Self) -> D1Result raise D1Error
-pub fn D1PreparedStatement::as_any(Self) -> @core.Any
-pub fn D1PreparedStatement::bind(Self, Array[@core.Any]) -> Self
-pub fn D1PreparedStatement::bind1(Self, @core.Any) -> Self
-pub fn D1PreparedStatement::bind2(Self, @core.Any, @core.Any) -> Self
-pub fn D1PreparedStatement::bind3(Self, @core.Any, @core.Any, @core.Any) -> Self
-pub async fn D1PreparedStatement::first(Self) -> @core.Any? raise D1Error
-pub async fn D1PreparedStatement::first_col(Self, String) -> @core.Any? raise D1Error
-pub async fn D1PreparedStatement::raw(Self, columnNames? : Bool) -> Array[@core.Any] raise D1Error
+pub fn D1PreparedStatement::as_any(Self) -> @js_core.Any
+pub fn D1PreparedStatement::bind(Self, Array[@js_core.Any]) -> Self
+pub fn D1PreparedStatement::bind1(Self, @js_core.Any) -> Self
+pub fn D1PreparedStatement::bind2(Self, @js_core.Any, @js_core.Any) -> Self
+pub fn D1PreparedStatement::bind3(Self, @js_core.Any, @js_core.Any, @js_core.Any) -> Self
+pub async fn D1PreparedStatement::first(Self) -> @js_core.Any? raise D1Error
+pub async fn D1PreparedStatement::first_col(Self, String) -> @js_core.Any? raise D1Error
+pub async fn D1PreparedStatement::raw(Self, columnNames? : Bool) -> Array[@js_core.Any] raise D1Error
 pub async fn D1PreparedStatement::run(Self) -> D1Result raise D1Error
 
 #alias(D1ResultSet)
 #external
 pub type D1Result
-pub fn D1Result::as_any(Self) -> @core.Any
+pub fn D1Result::as_any(Self) -> @js_core.Any
 pub fn D1Result::error(Self) -> String?
-pub fn D1Result::get_results(Self) -> Array[@core.Any]
+pub fn D1Result::get_results(Self) -> Array[@js_core.Any]
 pub fn D1Result::meta(Self) -> D1Meta?
-pub fn D1Result::results_raw(Self) -> @core.Any
+pub fn D1Result::results_raw(Self) -> @js_core.Any
 pub fn D1Result::success(Self) -> Bool
 
 #external
 pub type Doctype
-pub fn Doctype::as_any(Self) -> @core.Any
+pub fn Doctype::as_any(Self) -> @js_core.Any
 pub fn Doctype::name(Self) -> String?
 pub fn Doctype::public_id(Self) -> String?
 pub fn Doctype::system_id(Self) -> String?
@@ -177,7 +177,7 @@ pub fn Doctype::system_id(Self) -> String?
 pub type DocumentEnd
 pub fn DocumentEnd::append(Self, String, ContentOptions) -> Self
 pub fn DocumentEnd::append_text(Self, String) -> Self
-pub fn DocumentEnd::as_any(Self) -> @core.Any
+pub fn DocumentEnd::as_any(Self) -> @js_core.Any
 
 pub(all) struct DocumentHandler {
   doctype : ((Doctype) -> Unit)?
@@ -185,30 +185,30 @@ pub(all) struct DocumentHandler {
   text : ((TextChunk) -> Unit)?
   end : ((DocumentEnd) -> Unit)?
 }
-pub fn DocumentHandler::to_js(Self) -> @core.Any
+pub fn DocumentHandler::to_js(Self) -> @js_core.Any
 
 pub(all) struct DurableObjectGetAlarmOptions {
   allowConcurrency : Bool?
 }
-pub fn DurableObjectGetAlarmOptions::to_js(Self) -> @core.Any
+pub fn DurableObjectGetAlarmOptions::to_js(Self) -> @js_core.Any
 
 pub(all) struct DurableObjectGetOptions {
   allowConcurrency : Bool?
   noCache : Bool?
 }
-pub fn DurableObjectGetOptions::to_js(Self) -> @core.Any
+pub fn DurableObjectGetOptions::to_js(Self) -> @js_core.Any
 
 pub(all) struct DurableObjectId {
   name : String?
 }
-pub fn DurableObjectId::as_any(Self) -> @core.Any
+pub fn DurableObjectId::as_any(Self) -> @js_core.Any
 pub fn DurableObjectId::equals(Self, Self) -> Bool
 pub fn DurableObjectId::to_string(Self) -> String
 
 pub(all) struct DurableObjectIdOptions {
   jurisdiction : String?
 }
-pub fn DurableObjectIdOptions::to_js(Self) -> @core.Any
+pub fn DurableObjectIdOptions::to_js(Self) -> @js_core.Any
 
 pub(all) struct DurableObjectListOptions {
   start : String?
@@ -220,11 +220,11 @@ pub(all) struct DurableObjectListOptions {
   allowConcurrency : Bool?
   noCache : Bool?
 }
-pub fn DurableObjectListOptions::to_js(Self) -> @core.Any
+pub fn DurableObjectListOptions::to_js(Self) -> @js_core.Any
 
 #external
 pub type DurableObjectNamespace
-pub fn DurableObjectNamespace::as_any(Self) -> @core.Any
+pub fn DurableObjectNamespace::as_any(Self) -> @js_core.Any
 pub fn DurableObjectNamespace::get(Self, DurableObjectId) -> DurableObjectStub
 pub fn DurableObjectNamespace::get_by_id_string(Self, String) -> DurableObjectStub
 pub fn DurableObjectNamespace::get_by_name(Self, String) -> DurableObjectStub
@@ -238,25 +238,25 @@ pub(all) struct DurableObjectPutOptions {
   allowUnconfirmed : Bool?
   noCache : Bool?
 }
-pub fn DurableObjectPutOptions::to_js(Self) -> @core.Any
+pub fn DurableObjectPutOptions::to_js(Self) -> @js_core.Any
 
 pub(all) struct DurableObjectSetAlarmOptions {
   allowConcurrency : Bool?
   allowUnconfirmed : Bool?
 }
-pub fn DurableObjectSetAlarmOptions::to_js(Self) -> @core.Any
+pub fn DurableObjectSetAlarmOptions::to_js(Self) -> @js_core.Any
 
 pub(all) struct DurableObjectState {
   id : DurableObjectId
   storage : DurableObjectStorage
 }
-pub fn DurableObjectState::as_any(Self) -> @core.Any
-pub async fn DurableObjectState::block_concurrency_while(Self, @core.Any) -> Unit
-pub fn DurableObjectState::wait_until(Self, @core.Any) -> Unit
+pub fn DurableObjectState::as_any(Self) -> @js_core.Any
+pub async fn DurableObjectState::block_concurrency_while(Self, @js_core.Any) -> Unit
+pub fn DurableObjectState::wait_until(Self, @js_core.Any) -> Unit
 
 #external
 pub type DurableObjectStorage
-pub fn DurableObjectStorage::as_any(Self) -> @core.Any
+pub fn DurableObjectStorage::as_any(Self) -> @js_core.Any
 pub async fn DurableObjectStorage::delete(Self, String) -> Bool
 pub async fn DurableObjectStorage::delete_alarm(Self) -> Unit
 pub async fn DurableObjectStorage::delete_alarm_with_options(Self, DurableObjectSetAlarmOptions) -> Unit
@@ -265,48 +265,48 @@ pub async fn DurableObjectStorage::delete_all_with_options(Self, DurableObjectPu
 pub async fn DurableObjectStorage::delete_multiple(Self, Array[String]) -> Int
 pub async fn DurableObjectStorage::delete_multiple_with_options(Self, Array[String], DurableObjectPutOptions) -> Int
 pub async fn DurableObjectStorage::delete_with_options(Self, String, DurableObjectPutOptions) -> Bool
-pub async fn DurableObjectStorage::get(Self, String) -> @core.Any?
+pub async fn DurableObjectStorage::get(Self, String) -> @js_core.Any?
 pub async fn DurableObjectStorage::get_alarm(Self) -> Int?
 pub async fn DurableObjectStorage::get_alarm_with_options(Self, DurableObjectGetAlarmOptions) -> Int?
-pub async fn DurableObjectStorage::get_multiple(Self, Array[String]) -> @core.Any
-pub async fn DurableObjectStorage::get_multiple_with_options(Self, Array[String], DurableObjectGetOptions) -> @core.Any
-pub async fn DurableObjectStorage::get_with_options(Self, String, DurableObjectGetOptions) -> @core.Any?
-pub async fn DurableObjectStorage::list(Self) -> @core.Any
-pub async fn DurableObjectStorage::list_with_options(Self, DurableObjectListOptions) -> @core.Any
-pub async fn DurableObjectStorage::put(Self, String, @core.Any) -> Unit
-pub async fn DurableObjectStorage::put_multiple(Self, @core.Any) -> Unit
-pub async fn DurableObjectStorage::put_multiple_with_options(Self, @core.Any, DurableObjectPutOptions) -> Unit
-pub async fn DurableObjectStorage::put_with_options(Self, String, @core.Any, DurableObjectPutOptions) -> Unit
+pub async fn DurableObjectStorage::get_multiple(Self, Array[String]) -> @js_core.Any
+pub async fn DurableObjectStorage::get_multiple_with_options(Self, Array[String], DurableObjectGetOptions) -> @js_core.Any
+pub async fn DurableObjectStorage::get_with_options(Self, String, DurableObjectGetOptions) -> @js_core.Any?
+pub async fn DurableObjectStorage::list(Self) -> @js_core.Any
+pub async fn DurableObjectStorage::list_with_options(Self, DurableObjectListOptions) -> @js_core.Any
+pub async fn DurableObjectStorage::put(Self, String, @js_core.Any) -> Unit
+pub async fn DurableObjectStorage::put_multiple(Self, @js_core.Any) -> Unit
+pub async fn DurableObjectStorage::put_multiple_with_options(Self, @js_core.Any, DurableObjectPutOptions) -> Unit
+pub async fn DurableObjectStorage::put_with_options(Self, String, @js_core.Any, DurableObjectPutOptions) -> Unit
 pub async fn DurableObjectStorage::set_alarm(Self, Int) -> Unit
 pub async fn DurableObjectStorage::set_alarm_with_options(Self, Int, DurableObjectSetAlarmOptions) -> Unit
 pub fn DurableObjectStorage::sql(Self) -> SqlStorage
 pub async fn DurableObjectStorage::sync(Self) -> Unit
-pub async fn DurableObjectStorage::transaction(Self, @core.Any) -> @core.Any
+pub async fn DurableObjectStorage::transaction(Self, @js_core.Any) -> @js_core.Any
 
 pub(all) struct DurableObjectStub {
   id : DurableObjectId
   name : String?
 }
-pub fn DurableObjectStub::as_any(Self) -> @core.Any
-pub async fn DurableObjectStub::fetch(Self, @core.Any) -> @core.Any
-pub async fn DurableObjectStub::fetch_url(Self, String) -> @core.Any
-pub async fn DurableObjectStub::fetch_url_with_init(Self, String, @core.Any) -> @core.Any
-pub async fn DurableObjectStub::fetch_with_init(Self, @core.Any, @core.Any) -> @core.Any
+pub fn DurableObjectStub::as_any(Self) -> @js_core.Any
+pub async fn DurableObjectStub::fetch(Self, @js_core.Any) -> @js_core.Any
+pub async fn DurableObjectStub::fetch_url(Self, String) -> @js_core.Any
+pub async fn DurableObjectStub::fetch_url_with_init(Self, String, @js_core.Any) -> @js_core.Any
+pub async fn DurableObjectStub::fetch_with_init(Self, @js_core.Any, @js_core.Any) -> @js_core.Any
 
 #external
 pub type DurableObjectTransaction
-pub fn DurableObjectTransaction::as_any(Self) -> @core.Any
+pub fn DurableObjectTransaction::as_any(Self) -> @js_core.Any
 pub async fn DurableObjectTransaction::delete(Self, String) -> Bool
 pub async fn DurableObjectTransaction::delete_alarm(Self) -> Unit
 pub async fn DurableObjectTransaction::delete_all(Self) -> Unit
 pub async fn DurableObjectTransaction::delete_multiple(Self, Array[String]) -> Int
-pub async fn DurableObjectTransaction::get(Self, String) -> @core.Any?
+pub async fn DurableObjectTransaction::get(Self, String) -> @js_core.Any?
 pub async fn DurableObjectTransaction::get_alarm(Self) -> Int?
-pub async fn DurableObjectTransaction::get_multiple(Self, Array[String]) -> @core.Any
-pub async fn DurableObjectTransaction::list(Self) -> @core.Any
-pub async fn DurableObjectTransaction::list_with_options(Self, DurableObjectListOptions) -> @core.Any
-pub async fn DurableObjectTransaction::put(Self, String, @core.Any) -> Unit
-pub async fn DurableObjectTransaction::put_multiple(Self, @core.Any) -> Unit
+pub async fn DurableObjectTransaction::get_multiple(Self, Array[String]) -> @js_core.Any
+pub async fn DurableObjectTransaction::list(Self) -> @js_core.Any
+pub async fn DurableObjectTransaction::list_with_options(Self, DurableObjectListOptions) -> @js_core.Any
+pub async fn DurableObjectTransaction::put(Self, String, @js_core.Any) -> Unit
+pub async fn DurableObjectTransaction::put_multiple(Self, @js_core.Any) -> Unit
 pub fn DurableObjectTransaction::rollback(Self) -> Unit
 pub async fn DurableObjectTransaction::set_alarm(Self, Int) -> Unit
 
@@ -316,7 +316,7 @@ pub fn Element::after(Self, String, ContentOptions) -> Self
 pub fn Element::after_text(Self, String) -> Self
 pub fn Element::append(Self, String, ContentOptions) -> Self
 pub fn Element::append_text(Self, String) -> Self
-pub fn Element::as_any(Self) -> @core.Any
+pub fn Element::as_any(Self) -> @js_core.Any
 pub fn Element::before(Self, String, ContentOptions) -> Self
 pub fn Element::before_text(Self, String) -> Self
 pub fn Element::get_attribute(Self, String) -> String?
@@ -345,16 +345,16 @@ pub(all) struct ElementHandler {
 pub fn ElementHandler::comments_only((HTMLComment) -> Unit) -> Self
 pub fn ElementHandler::element_only((Element) -> Unit) -> Self
 pub fn ElementHandler::text_only((TextChunk) -> Unit) -> Self
-pub fn ElementHandler::to_js(Self) -> @core.Any
+pub fn ElementHandler::to_js(Self) -> @js_core.Any
 
 #external
 pub type EmailMessage
-pub fn EmailMessage::as_any(Self) -> @core.Any
+pub fn EmailMessage::as_any(Self) -> @js_core.Any
 pub fn EmailMessage::from(Self) -> String
 pub fn EmailMessage::headers(Self) -> @http.Headers?
 pub fn EmailMessage::message_id(Self) -> String?
-pub fn EmailMessage::new(String, String, @core.Any) -> Self
-pub fn EmailMessage::raw(Self) -> @core.Any?
+pub fn EmailMessage::new(String, String, @js_core.Any) -> Self
+pub fn EmailMessage::raw(Self) -> @js_core.Any?
 pub fn EmailMessage::raw_size(Self) -> Int?
 pub fn EmailMessage::to_(Self) -> String
 
@@ -362,7 +362,7 @@ pub fn EmailMessage::to_(Self) -> String
 pub type EndTag
 pub fn EndTag::after(Self, String, ContentOptions) -> Self
 pub fn EndTag::after_text(Self, String) -> Self
-pub fn EndTag::as_any(Self) -> @core.Any
+pub fn EndTag::as_any(Self) -> @js_core.Any
 pub fn EndTag::before(Self, String, ContentOptions) -> Self
 pub fn EndTag::before_text(Self, String) -> Self
 pub fn EndTag::name(Self) -> String
@@ -371,11 +371,11 @@ pub fn EndTag::set_name(Self, String) -> Unit
 
 #external
 pub type ForwardableEmailMessage
-pub fn ForwardableEmailMessage::as_any(Self) -> @core.Any
+pub fn ForwardableEmailMessage::as_any(Self) -> @js_core.Any
 pub async fn ForwardableEmailMessage::forward(Self, String, headers? : @http.Headers) -> Unit
 pub fn ForwardableEmailMessage::from(Self) -> String
 pub fn ForwardableEmailMessage::headers(Self) -> @http.Headers?
-pub fn ForwardableEmailMessage::raw(Self) -> @core.Any?
+pub fn ForwardableEmailMessage::raw(Self) -> @js_core.Any?
 pub fn ForwardableEmailMessage::raw_size(Self) -> Int
 pub async fn ForwardableEmailMessage::reply(Self, EmailMessage) -> Unit
 pub fn ForwardableEmailMessage::set_reject(Self, String) -> Unit
@@ -386,7 +386,7 @@ pub fn ForwardableEmailMessage::to_email_message(Self) -> EmailMessage
 pub type HTMLComment
 pub fn HTMLComment::after(Self, String, ContentOptions) -> Self
 pub fn HTMLComment::after_text(Self, String) -> Self
-pub fn HTMLComment::as_any(Self) -> @core.Any
+pub fn HTMLComment::as_any(Self) -> @js_core.Any
 pub fn HTMLComment::before(Self, String, ContentOptions) -> Self
 pub fn HTMLComment::before_text(Self, String) -> Self
 pub fn HTMLComment::remove(Self) -> Self
@@ -398,7 +398,7 @@ pub fn HTMLComment::text(Self) -> String
 
 #external
 pub type HTMLRewriter
-pub fn HTMLRewriter::as_any(Self) -> @core.Any
+pub fn HTMLRewriter::as_any(Self) -> @js_core.Any
 pub fn HTMLRewriter::new() -> Self
 pub fn HTMLRewriter::on(Self, String, ElementHandler) -> Self
 pub fn HTMLRewriter::on_document(Self, DocumentHandler) -> Self
@@ -406,8 +406,8 @@ pub fn HTMLRewriter::transform(Self, @http.Response) -> @http.Response
 
 #external
 pub type Hyperdrive
-pub fn Hyperdrive::as_any(Self) -> @core.Any
-pub fn Hyperdrive::connect(Self) -> @core.Any
+pub fn Hyperdrive::as_any(Self) -> @js_core.Any
+pub fn Hyperdrive::connect(Self) -> @js_core.Any
 pub fn Hyperdrive::connection_string(Self) -> String
 pub fn Hyperdrive::database(Self) -> String
 pub fn Hyperdrive::host(Self) -> String
@@ -417,7 +417,7 @@ pub fn Hyperdrive::user(Self) -> String
 
 #external
 pub type InstanceStatus
-pub fn InstanceStatus::as_any(Self) -> @core.Any
+pub fn InstanceStatus::as_any(Self) -> @js_core.Any
 pub fn InstanceStatus::error(Self) -> WorkflowError?
 pub fn InstanceStatus::is_complete(Self) -> Bool
 pub fn InstanceStatus::is_errored(Self) -> Bool
@@ -427,52 +427,52 @@ pub fn InstanceStatus::is_running(Self) -> Bool
 pub fn InstanceStatus::is_terminated(Self) -> Bool
 pub fn InstanceStatus::is_waiting(Self) -> Bool
 pub fn InstanceStatus::is_waiting_for_pause(Self) -> Bool
-pub fn InstanceStatus::output(Self) -> @core.Any?
+pub fn InstanceStatus::output(Self) -> @js_core.Any?
 pub fn InstanceStatus::status(Self) -> String
 
 pub(all) struct KVKey {
   name : String
   expiration : Int?
-  metadata : @core.Any?
+  metadata : @js_core.Any?
 }
-pub fn KVKey::as_any(Self) -> @core.Any
+pub fn KVKey::as_any(Self) -> @js_core.Any
 
 pub(all) struct KVListResult {
   keys : Array[KVKey]
   list_complete : Bool
   cursor : String?
 }
-pub fn KVListResult::as_any(Self) -> @core.Any
+pub fn KVListResult::as_any(Self) -> @js_core.Any
 
 #external
 pub type KVNamespace
-pub fn KVNamespace::as_any(Self) -> @core.Any
+pub fn KVNamespace::as_any(Self) -> @js_core.Any
 pub async fn KVNamespace::delete(Self, String) -> Unit
 pub async fn KVNamespace::get(Self, String, type_? : String, cacheTtl? : Int) -> String?
-pub async fn KVNamespace::get_array_buffer(Self, String) -> @core.Any?
-pub async fn KVNamespace::get_json(Self, String) -> @core.Any?
-pub async fn KVNamespace::get_stream(Self, String) -> @core.Any?
+pub async fn KVNamespace::get_array_buffer(Self, String) -> @js_core.Any?
+pub async fn KVNamespace::get_json(Self, String) -> @js_core.Any?
+pub async fn KVNamespace::get_stream(Self, String) -> @js_core.Any?
 pub async fn KVNamespace::get_with_metadata(Self, String, type_? : String, cacheTtl? : Int) -> KVValueWithMetadata
 pub async fn KVNamespace::list(Self, prefix? : String, limit? : Int, cursor? : String) -> KVListResult
-pub async fn KVNamespace::put(Self, String, String, expiration? : Int, expirationTtl? : Int, metadata? : @core.Any) -> Unit
-pub async fn KVNamespace::put_with_metadata(Self, String, String, @core.Any) -> Unit
+pub async fn KVNamespace::put(Self, String, String, expiration? : Int, expirationTtl? : Int, metadata? : @js_core.Any) -> Unit
+pub async fn KVNamespace::put_with_metadata(Self, String, String, @js_core.Any) -> Unit
 
 pub(all) struct KVValueWithMetadata {
-  value : @core.Any?
-  metadata : @core.Any?
+  value : @js_core.Any?
+  metadata : @js_core.Any?
 }
-pub fn KVValueWithMetadata::as_any(Self) -> @core.Any
+pub fn KVValueWithMetadata::as_any(Self) -> @js_core.Any
 
 pub(all) struct MessageSendRequest {
-  body : @core.Any
+  body : @js_core.Any
   contentType : QueueContentType?
   delaySeconds : Int?
 }
-pub fn MessageSendRequest::to_js(Self) -> @core.Any
+pub fn MessageSendRequest::to_js(Self) -> @js_core.Any
 
 #external
 pub type Miniflare
-pub fn Miniflare::as_any(Self) -> @core.Any
+pub fn Miniflare::as_any(Self) -> @js_core.Any
 pub async fn Miniflare::dispose(Self) -> Unit
 pub async fn Miniflare::get_d1_database(Self, String) -> D1Database
 pub async fn Miniflare::get_kv_namespace(Self, String) -> KVNamespace
@@ -491,8 +491,8 @@ pub fn MiniflareOptions::default() -> Self
 
 #external
 pub type Queue
-pub fn Queue::as_any(Self) -> @core.Any
-pub async fn Queue::send(Self, @core.Any, options? : QueueSendOptions) -> Unit
+pub fn Queue::as_any(Self) -> @js_core.Any
+pub async fn Queue::send(Self, @js_core.Any, options? : QueueSendOptions) -> Unit
 pub async fn Queue::send_batch(Self, Array[MessageSendRequest], options? : QueueSendBatchOptions) -> Unit
 
 pub(all) enum QueueContentType {
@@ -506,7 +506,7 @@ pub fn QueueContentType::to_string(Self) -> String
 #external
 pub type QueueEvent
 pub fn QueueEvent::ack_all(Self) -> Unit
-pub fn QueueEvent::as_any(Self) -> @core.Any
+pub fn QueueEvent::as_any(Self) -> @js_core.Any
 pub fn QueueEvent::messages(Self) -> Array[QueueMessage]
 pub fn QueueEvent::queue(Self) -> String
 pub fn QueueEvent::retry_all(Self, options? : QueueRetryOptions) -> Unit
@@ -514,9 +514,9 @@ pub fn QueueEvent::retry_all(Self, options? : QueueRetryOptions) -> Unit
 #external
 pub type QueueMessage
 pub fn QueueMessage::ack(Self) -> Unit
-pub fn QueueMessage::as_any(Self) -> @core.Any
+pub fn QueueMessage::as_any(Self) -> @js_core.Any
 pub fn QueueMessage::attempts(Self) -> Int
-pub fn QueueMessage::body(Self) -> @core.Any
+pub fn QueueMessage::body(Self) -> @js_core.Any
 pub fn QueueMessage::id(Self) -> String
 pub fn QueueMessage::retry(Self, options? : QueueRetryOptions) -> Unit
 pub fn QueueMessage::timestamp(Self) -> @date.Date
@@ -524,7 +524,7 @@ pub fn QueueMessage::timestamp(Self) -> @date.Date
 #external
 pub type QueueMessageBatch
 pub fn QueueMessageBatch::ack_all(Self) -> Unit
-pub fn QueueMessageBatch::as_any(Self) -> @core.Any
+pub fn QueueMessageBatch::as_any(Self) -> @js_core.Any
 pub fn QueueMessageBatch::messages(Self) -> Array[QueueMessage]
 pub fn QueueMessageBatch::queue(Self) -> String
 pub fn QueueMessageBatch::retry_all(Self, options? : QueueRetryOptions) -> Unit
@@ -532,29 +532,29 @@ pub fn QueueMessageBatch::retry_all(Self, options? : QueueRetryOptions) -> Unit
 pub(all) struct QueueRetryOptions {
   delaySeconds : Int?
 }
-pub fn QueueRetryOptions::to_js(Self) -> @core.Any
+pub fn QueueRetryOptions::to_js(Self) -> @js_core.Any
 
 pub(all) struct QueueSendBatchOptions {
   delaySeconds : Int?
 }
-pub fn QueueSendBatchOptions::to_js(Self) -> @core.Any
+pub fn QueueSendBatchOptions::to_js(Self) -> @js_core.Any
 
 pub(all) struct QueueSendOptions {
   contentType : QueueContentType?
   delaySeconds : Int?
 }
-pub fn QueueSendOptions::to_js(Self) -> @core.Any
+pub fn QueueSendOptions::to_js(Self) -> @js_core.Any
 
 #external
 pub type R2Bucket
-pub fn R2Bucket::as_any(Self) -> @core.Any
-pub async fn R2Bucket::create_multipart_upload(Self, String, httpMetadata? : R2HttpMetadata, customMetadata? : @core.Any, md5? : String, sha1? : String, sha256? : String, sha384? : String, sha512? : String) -> R2MultipartUpload
+pub fn R2Bucket::as_any(Self) -> @js_core.Any
+pub async fn R2Bucket::create_multipart_upload(Self, String, httpMetadata? : R2HttpMetadata, customMetadata? : @js_core.Any, md5? : String, sha1? : String, sha256? : String, sha384? : String, sha512? : String) -> R2MultipartUpload
 pub async fn R2Bucket::delete(Self, String) -> Unit
 pub async fn R2Bucket::delete_multiple(Self, Array[String]) -> Unit
 pub async fn R2Bucket::get(Self, String, onlyIf? : R2Conditional, range? : R2Range) -> R2Object?
 pub async fn R2Bucket::head(Self, String) -> R2Object?
 pub async fn R2Bucket::list(Self, limit? : Int, prefix? : String, cursor? : String, delimiter? : String, startAfter? : String, include_? : Array[String]) -> R2Objects
-pub async fn R2Bucket::put(Self, String, @core.Any, httpMetadata? : R2HttpMetadata, customMetadata? : @core.Any, md5? : String, sha1? : String, sha256? : String, sha384? : String, sha512? : String) -> R2Object
+pub async fn R2Bucket::put(Self, String, @js_core.Any, httpMetadata? : R2HttpMetadata, customMetadata? : @js_core.Any, md5? : String, sha1? : String, sha256? : String, sha384? : String, sha512? : String) -> R2Object
 pub fn R2Bucket::resume_multipart_upload(Self, String, String) -> R2MultipartUpload
 
 pub(all) struct R2Conditional {
@@ -572,38 +572,38 @@ pub(all) struct R2HttpMetadata {
   cacheControl : String?
   cacheExpiry : @date.Date?
 }
-pub fn R2HttpMetadata::as_any(Self) -> @core.Any
+pub fn R2HttpMetadata::as_any(Self) -> @js_core.Any
 
 #external
 pub type R2MultipartUpload
 pub async fn R2MultipartUpload::abort(Self) -> Unit
-pub fn R2MultipartUpload::as_any(Self) -> @core.Any
+pub fn R2MultipartUpload::as_any(Self) -> @js_core.Any
 pub async fn R2MultipartUpload::complete(Self, Array[R2UploadedPart]) -> R2Object
 pub fn R2MultipartUpload::key(Self) -> String
 pub fn R2MultipartUpload::uploadId(Self) -> String
-pub async fn R2MultipartUpload::upload_part(Self, Int, @core.Any) -> R2UploadedPart
+pub async fn R2MultipartUpload::upload_part(Self, Int, @js_core.Any) -> R2UploadedPart
 
 #external
 pub type R2Object
 pub async fn R2Object::array_buffer(Self) -> @arraybuffer.ArrayBuffer
-pub fn R2Object::as_any(Self) -> @core.Any
+pub fn R2Object::as_any(Self) -> @js_core.Any
 pub async fn R2Object::blob(Self) -> @blob.Blob
 pub fn R2Object::body(Self) -> @streams.ReadableStream
 pub fn R2Object::body_used(Self) -> Bool
-pub fn R2Object::custom_metadata(Self) -> @core.Any
+pub fn R2Object::custom_metadata(Self) -> @js_core.Any
 pub fn R2Object::etag(Self) -> String
-pub fn R2Object::http_metadata(Self) -> @core.Any
-pub async fn R2Object::json(Self) -> @core.Any
+pub fn R2Object::http_metadata(Self) -> @js_core.Any
+pub async fn R2Object::json(Self) -> @js_core.Any
 pub fn R2Object::key(Self) -> String
 pub fn R2Object::size(Self) -> Int
 pub async fn R2Object::text(Self) -> String
-pub fn R2Object::uploaded(Self) -> @core.Any
+pub fn R2Object::uploaded(Self) -> @js_core.Any
 pub fn R2Object::version(Self) -> String
-pub fn R2Object::write_http_metadata(Self, @core.Any) -> Unit
+pub fn R2Object::write_http_metadata(Self, @js_core.Any) -> Unit
 
 #external
 pub type R2Objects
-pub fn R2Objects::as_any(Self) -> @core.Any
+pub fn R2Objects::as_any(Self) -> @js_core.Any
 pub fn R2Objects::cursor(Self) -> String?
 pub fn R2Objects::delimited_prefixes(Self) -> Array[String]
 pub fn R2Objects::objects(Self) -> Array[R2Object]
@@ -619,56 +619,56 @@ pub(all) struct R2UploadedPart {
   partNumber : Int
   etag : String
 }
-pub fn R2UploadedPart::as_any(Self) -> @core.Any
+pub fn R2UploadedPart::as_any(Self) -> @js_core.Any
 
 #external
 pub type RateLimitBinding
-pub fn RateLimitBinding::as_any(Self) -> @core.Any
+pub fn RateLimitBinding::as_any(Self) -> @js_core.Any
 pub async fn RateLimitBinding::limit(Self, String) -> Bool
 
 pub(all) struct RateLimitResult {
   success : Bool
 }
-pub fn RateLimitResult::as_any(Self) -> @core.Any
+pub fn RateLimitResult::as_any(Self) -> @js_core.Any
 pub fn RateLimitResult::success(Self) -> Bool
 
 #external
 pub type SendEmail
-pub fn SendEmail::as_any(Self) -> @core.Any
+pub fn SendEmail::as_any(Self) -> @js_core.Any
 pub async fn SendEmail::send(Self, EmailMessage) -> Unit
 
 #external
 pub type SqlStorage
-pub fn SqlStorage::as_any(Self) -> @core.Any
+pub fn SqlStorage::as_any(Self) -> @js_core.Any
 pub fn SqlStorage::database_size(Self) -> Int
-pub fn SqlStorage::exec(Self, String, Array[@core.Any]) -> SqlStorageCursor
-pub fn SqlStorage::exec1(Self, String, @core.Any) -> SqlStorageCursor
-pub fn SqlStorage::exec2(Self, String, @core.Any, @core.Any) -> SqlStorageCursor
-pub fn SqlStorage::exec3(Self, String, @core.Any, @core.Any, @core.Any) -> SqlStorageCursor
+pub fn SqlStorage::exec(Self, String, Array[@js_core.Any]) -> SqlStorageCursor
+pub fn SqlStorage::exec1(Self, String, @js_core.Any) -> SqlStorageCursor
+pub fn SqlStorage::exec2(Self, String, @js_core.Any, @js_core.Any) -> SqlStorageCursor
+pub fn SqlStorage::exec3(Self, String, @js_core.Any, @js_core.Any, @js_core.Any) -> SqlStorageCursor
 pub fn SqlStorage::exec_raw(Self, String) -> SqlStorageCursor
 
 #external
 pub type SqlStorageCursor
-pub fn SqlStorageCursor::as_any(Self) -> @core.Any
+pub fn SqlStorageCursor::as_any(Self) -> @js_core.Any
 pub fn SqlStorageCursor::column_names(Self) -> Array[String]
 pub fn SqlStorageCursor::next(Self) -> SqlStorageIteratorResult
-pub fn SqlStorageCursor::one(Self) -> @core.Any
+pub fn SqlStorageCursor::one(Self) -> @js_core.Any
 pub fn SqlStorageCursor::raw(Self) -> Self
 pub fn SqlStorageCursor::rows_read(Self) -> Int
 pub fn SqlStorageCursor::rows_written(Self) -> Int
-pub fn SqlStorageCursor::to_array(Self) -> Array[@core.Any]
+pub fn SqlStorageCursor::to_array(Self) -> Array[@js_core.Any]
 
 #external
 pub type SqlStorageIteratorResult
-pub fn SqlStorageIteratorResult::as_any(Self) -> @core.Any
+pub fn SqlStorageIteratorResult::as_any(Self) -> @js_core.Any
 pub fn SqlStorageIteratorResult::done(Self) -> Bool
-pub fn SqlStorageIteratorResult::value(Self) -> @core.Any?
+pub fn SqlStorageIteratorResult::value(Self) -> @js_core.Any?
 
 #external
 pub type TextChunk
 pub fn TextChunk::after(Self, String, ContentOptions) -> Self
 pub fn TextChunk::after_text(Self, String) -> Self
-pub fn TextChunk::as_any(Self) -> @core.Any
+pub fn TextChunk::as_any(Self) -> @js_core.Any
 pub fn TextChunk::before(Self, String, ContentOptions) -> Self
 pub fn TextChunk::before_text(Self, String) -> Self
 pub fn TextChunk::last_in_text_node(Self) -> Bool
@@ -683,13 +683,13 @@ pub(all) struct TurnstileVerifyOptions {
   idempotencyKey : String?
 }
 pub fn TurnstileVerifyOptions::default() -> Self
-pub fn TurnstileVerifyOptions::idempotency_key_js(Self) -> @core.Any
-pub fn TurnstileVerifyOptions::remote_ip_js(Self) -> @core.Any
+pub fn TurnstileVerifyOptions::idempotency_key_js(Self) -> @js_core.Any
+pub fn TurnstileVerifyOptions::remote_ip_js(Self) -> @js_core.Any
 
 #external
 pub type TurnstileVerifyResult
 pub fn TurnstileVerifyResult::action(Self) -> String?
-pub fn TurnstileVerifyResult::as_any(Self) -> @core.Any
+pub fn TurnstileVerifyResult::as_any(Self) -> @js_core.Any
 pub fn TurnstileVerifyResult::cdata(Self) -> String?
 pub fn TurnstileVerifyResult::challenge_ts(Self) -> String?
 pub fn TurnstileVerifyResult::error_codes(Self) -> Array[String]
@@ -698,7 +698,7 @@ pub fn TurnstileVerifyResult::success(Self) -> Bool
 
 #external
 pub type VectorizeIndex
-pub fn VectorizeIndex::as_any(Self) -> @core.Any
+pub fn VectorizeIndex::as_any(Self) -> @js_core.Any
 pub async fn VectorizeIndex::delete_by_ids(Self, Array[String]) -> VectorizeMutationResult
 pub async fn VectorizeIndex::describe(Self) -> VectorizeIndexInfo
 pub async fn VectorizeIndex::get_by_ids(Self, Array[String]) -> Array[VectorizeVector]
@@ -709,29 +709,29 @@ pub async fn VectorizeIndex::upsert(Self, Array[VectorizeVector]) -> VectorizeMu
 
 #external
 pub type VectorizeIndexInfo
-pub fn VectorizeIndexInfo::as_any(Self) -> @core.Any
+pub fn VectorizeIndexInfo::as_any(Self) -> @js_core.Any
 pub fn VectorizeIndexInfo::dimensions(Self) -> Int
 pub fn VectorizeIndexInfo::metric(Self) -> String
 pub fn VectorizeIndexInfo::vector_count(Self) -> Int
 
 #external
 pub type VectorizeMatch
-pub fn VectorizeMatch::as_any(Self) -> @core.Any
+pub fn VectorizeMatch::as_any(Self) -> @js_core.Any
 pub fn VectorizeMatch::id(Self) -> String
-pub fn VectorizeMatch::metadata(Self) -> @core.Any?
+pub fn VectorizeMatch::metadata(Self) -> @js_core.Any?
 pub fn VectorizeMatch::ns(Self) -> String?
 pub fn VectorizeMatch::score(Self) -> Double
 pub fn VectorizeMatch::values(Self) -> Array[Double]?
 
 #external
 pub type VectorizeMatches
-pub fn VectorizeMatches::as_any(Self) -> @core.Any
+pub fn VectorizeMatches::as_any(Self) -> @js_core.Any
 pub fn VectorizeMatches::count(Self) -> Int
 pub fn VectorizeMatches::matches(Self) -> Array[VectorizeMatch]
 
 #external
 pub type VectorizeMutationResult
-pub fn VectorizeMutationResult::as_any(Self) -> @core.Any
+pub fn VectorizeMutationResult::as_any(Self) -> @js_core.Any
 pub fn VectorizeMutationResult::count(Self) -> Int
 pub fn VectorizeMutationResult::ids(Self) -> Array[String]
 pub fn VectorizeMutationResult::mutation_id(Self) -> String
@@ -741,10 +741,10 @@ pub(all) struct VectorizeQueryOptions {
   returnValues : Bool?
   returnMetadata : VectorizeReturnMetadata?
   ns : String?
-  filter : @core.Any?
+  filter : @js_core.Any?
 }
 pub fn VectorizeQueryOptions::default() -> Self
-pub fn VectorizeQueryOptions::to_js(Self) -> @core.Any
+pub fn VectorizeQueryOptions::to_js(Self) -> @js_core.Any
 
 pub(all) enum VectorizeReturnMetadata {
   None_
@@ -757,22 +757,22 @@ pub(all) struct VectorizeVector {
   id : String
   values : Array[Double]
   ns : String?
-  metadata : @core.Any?
+  metadata : @js_core.Any?
 }
-pub fn VectorizeVector::from_js(@core.Any) -> Self
-pub fn VectorizeVector::to_js(Self) -> @core.Any
+pub fn VectorizeVector::from_js(@js_core.Any) -> Self
+pub fn VectorizeVector::to_js(Self) -> @js_core.Any
 
 pub(all) struct WaitForEventOptions {
   event : String
   timeout : String?
 }
 pub fn WaitForEventOptions::new(String) -> Self
-pub fn WaitForEventOptions::to_js(Self) -> @core.Any
+pub fn WaitForEventOptions::to_js(Self) -> @js_core.Any
 pub fn WaitForEventOptions::with_timeout(String, String) -> Self
 
 #external
 pub type Workflow
-pub fn Workflow::as_any(Self) -> @core.Any
+pub fn Workflow::as_any(Self) -> @js_core.Any
 pub async fn Workflow::create(Self, WorkflowInstanceCreateOptions) -> WorkflowInstance
 pub async fn Workflow::create_batch(Self, Array[WorkflowInstanceCreateOptions]) -> Array[WorkflowInstance]
 pub async fn Workflow::create_default(Self) -> WorkflowInstance
@@ -781,44 +781,44 @@ pub async fn Workflow::get(Self, String) -> WorkflowInstance
 
 #external
 pub type WorkflowError
-pub fn WorkflowError::as_any(Self) -> @core.Any
+pub fn WorkflowError::as_any(Self) -> @js_core.Any
 pub fn WorkflowError::message(Self) -> String
 pub fn WorkflowError::name(Self) -> String
 
 #external
 pub type WorkflowEvent
-pub fn WorkflowEvent::as_any(Self) -> @core.Any
+pub fn WorkflowEvent::as_any(Self) -> @js_core.Any
 pub fn WorkflowEvent::instance_id(Self) -> String
-pub fn WorkflowEvent::payload(Self) -> @core.Any
-pub fn WorkflowEvent::timestamp(Self) -> @core.Any
+pub fn WorkflowEvent::payload(Self) -> @js_core.Any
+pub fn WorkflowEvent::timestamp(Self) -> @js_core.Any
 
 #external
 pub type WorkflowEventPayload
-pub fn WorkflowEventPayload::as_any(Self) -> @core.Any
+pub fn WorkflowEventPayload::as_any(Self) -> @js_core.Any
 pub fn WorkflowEventPayload::event_type(Self) -> String
-pub fn WorkflowEventPayload::payload(Self) -> @core.Any?
-pub fn WorkflowEventPayload::timestamp(Self) -> @core.Any
+pub fn WorkflowEventPayload::payload(Self) -> @js_core.Any?
+pub fn WorkflowEventPayload::timestamp(Self) -> @js_core.Any
 
 #external
 pub type WorkflowInstance
-pub fn WorkflowInstance::as_any(Self) -> @core.Any
+pub fn WorkflowInstance::as_any(Self) -> @js_core.Any
 pub fn WorkflowInstance::id(Self) -> String
 pub async fn WorkflowInstance::pause(Self) -> Unit
 pub async fn WorkflowInstance::restart(Self) -> Unit
 pub async fn WorkflowInstance::resume_(Self) -> Unit
-pub async fn WorkflowInstance::send_event(Self, String, @core.Any) -> Unit
+pub async fn WorkflowInstance::send_event(Self, String, @js_core.Any) -> Unit
 pub async fn WorkflowInstance::send_event_simple(Self, String) -> Unit
 pub async fn WorkflowInstance::status(Self) -> InstanceStatus
 pub async fn WorkflowInstance::terminate(Self) -> Unit
 
 pub(all) struct WorkflowInstanceCreateOptions {
   id : String?
-  params : @core.Any?
+  params : @js_core.Any?
 }
-pub fn WorkflowInstanceCreateOptions::to_js(Self) -> @core.Any
+pub fn WorkflowInstanceCreateOptions::to_js(Self) -> @js_core.Any
 pub fn WorkflowInstanceCreateOptions::with_id(String) -> Self
-pub fn WorkflowInstanceCreateOptions::with_id_and_params(String, @core.Any) -> Self
-pub fn WorkflowInstanceCreateOptions::with_params(@core.Any) -> Self
+pub fn WorkflowInstanceCreateOptions::with_id_and_params(String, @js_core.Any) -> Self
+pub fn WorkflowInstanceCreateOptions::with_params(@js_core.Any) -> Self
 
 pub(all) struct WorkflowRetryConfig {
   limit : Int
@@ -827,15 +827,15 @@ pub(all) struct WorkflowRetryConfig {
 }
 pub fn WorkflowRetryConfig::constant(Int, String) -> Self
 pub fn WorkflowRetryConfig::exponential(Int, String) -> Self
-pub fn WorkflowRetryConfig::to_js(Self) -> @core.Any
+pub fn WorkflowRetryConfig::to_js(Self) -> @js_core.Any
 
 #external
 pub type WorkflowStep
-pub fn WorkflowStep::as_any(Self) -> @core.Any
-pub async fn WorkflowStep::do_(Self, String, async () -> @core.Any) -> @core.Any
-pub async fn WorkflowStep::do_with_config(Self, String, WorkflowStepConfig, async () -> @core.Any) -> @core.Any
+pub fn WorkflowStep::as_any(Self) -> @js_core.Any
+pub async fn WorkflowStep::do_(Self, String, async () -> @js_core.Any) -> @js_core.Any
+pub async fn WorkflowStep::do_with_config(Self, String, WorkflowStepConfig, async () -> @js_core.Any) -> @js_core.Any
 pub async fn WorkflowStep::sleep(Self, String, String) -> Unit
-pub async fn WorkflowStep::sleep_until(Self, String, @core.Any) -> Unit
+pub async fn WorkflowStep::sleep_until(Self, String, @js_core.Any) -> Unit
 pub async fn WorkflowStep::wait_for_event(Self, String, WaitForEventOptions) -> WorkflowEventPayload
 
 pub(all) struct WorkflowStepConfig {
@@ -843,11 +843,11 @@ pub(all) struct WorkflowStepConfig {
   timeout : String?
 }
 pub fn WorkflowStepConfig::new(WorkflowRetryConfig, String) -> Self
-pub fn WorkflowStepConfig::to_js(Self) -> @core.Any
+pub fn WorkflowStepConfig::to_js(Self) -> @js_core.Any
 pub fn WorkflowStepConfig::with_retries(WorkflowRetryConfig) -> Self
 pub fn WorkflowStepConfig::with_timeout(String) -> Self
 
 // Type aliases
-pub type CloudflareFetchHandler = (CloudflareRequest, CloudflareEnv, CloudflareContext) -> @core.Promise[@http.Response]
+pub type CloudflareFetchHandler = (CloudflareRequest, CloudflareEnv, CloudflareContext) -> @js_core.Promise[@http.Response]
 
 // Traits

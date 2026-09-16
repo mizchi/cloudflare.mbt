@@ -19,16 +19,19 @@ MoonBit bindings for Cloudflare Workers APIs
 
 ## Installation
 
-This package depends on `mizchi/js`. Make sure to add both dependencies to your `moon.mod.json`:
+Add the Cloudflare bindings and the JavaScript modules your code imports to `moon.mod`:
 
-```json
-{
-  "deps": {
-    "mizchi/js": "0.8.2",
-    "mizchi/cloudflare": "0.1.0"
-  }
+```moonbit
+import {
+  "mizchi/cloudflare@0.1.12",
+  "mizchi/js_core@0.13.0",
+  "mizchi/js_web@0.13.0",
 }
 ```
+
+JavaScript bindings use the split `mizchi/js_*` modules introduced in 0.13.0.
+For example, import `"mizchi/js_core" @core` and `"mizchi/js_web/http"`
+in `moon.pkg` instead of `mizchi/js/core` and `mizchi/js/web/http`.
 
 ## Usage
 

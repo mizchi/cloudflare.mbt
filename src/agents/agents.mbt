@@ -229,7 +229,7 @@ pub fn AgentScheduleCriteria::to_js(self : AgentScheduleCriteria) -> @core.Any {
 
 ///|
 pub fn AgentScheduleCriteria::default() -> AgentScheduleCriteria {
-  { description: None, id: None, type_: None, startTime: None, endTime: None }
+  { description: None, id: None, type_: None, startTime: None, endTime: None, }
 }
 
 ///|
@@ -256,7 +256,7 @@ pub fn AgentLookupOptions::to_js(self : AgentLookupOptions) -> @core.Any {
 
 ///|
 pub fn AgentLookupOptions::default() -> AgentLookupOptions {
-  { jurisdiction: None, locationHint: None }
+  { jurisdiction: None, locationHint: None, }
 }
 
 ///|

@@ -2,7 +2,7 @@
 package "mizchi/cloudflare/ai"
 
 import {
-  "mizchi/js/core",
+  "mizchi/js_core",
 }
 
 // Values
@@ -12,21 +12,21 @@ import {
 // Types and methods
 #external
 pub type Ai
-pub fn Ai::as_any(Self) -> @core.Any
+pub fn Ai::as_any(Self) -> @js_core.Any
 pub fn Ai::get_logs(Self) -> Array[String]
 pub fn Ai::last_request_id(Self) -> String?
-pub async fn Ai::new(@core.Any, options? : AiOptions) -> Self
-pub async fn Ai::run(Self, String, @core.Any) -> @core.Any
+pub async fn Ai::new(@js_core.Any, options? : AiOptions) -> Self
+pub async fn Ai::run(Self, String, @js_core.Any) -> @js_core.Any
 
 pub(all) struct AiOptions {
   debug : Bool?
   prefix : String?
-  extraHeaders : @core.Any?
-  overrideSettings : @core.Any?
+  extraHeaders : @js_core.Any?
+  overrideSettings : @js_core.Any?
   fetchUrl : String?
 }
 pub fn AiOptions::default() -> Self
-pub fn AiOptions::to_js(Self) -> @core.Any
+pub fn AiOptions::to_js(Self) -> @js_core.Any
 
 // Type aliases
 

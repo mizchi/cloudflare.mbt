@@ -320,12 +320,12 @@ async test "queues bindings" {
   assert_eq(message.id(), "m-1")
   assert_eq(message.attempts(), 2)
   message.ack()
-  message.retry(options={ delaySeconds: Some(11) })
+  message.retry(options={ delaySeconds: Some(11), })
   assert_eq(queue_message_acked(), 1)
   assert_eq(queue_message_retry_delay(), 11)
 
   batch.ack_all()
-  batch.retry_all(options={ delaySeconds: Some(13) })
+  batch.retry_all(options={ delaySeconds: Some(13), })
   assert_eq(queue_batch_acked(), 1)
   assert_eq(queue_batch_retry_delay(), 13)
 }

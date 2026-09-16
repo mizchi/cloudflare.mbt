@@ -1,12 +1,12 @@
 import {
   "mizchi/js",
-  "mizchi/js/web/http",
-  "mizchi/js/web/url",
-  "mizchi/js/web/streams",
+  "mizchi/js_web/http",
+  "mizchi/js_web/url",
+  "mizchi/js_web/streams",
   "mizchi/cloudflare",
-  "mizchi/js/builtins/global",
-  "mizchi/js/builtins/json",
-  "mizchi/js/core",
+  "mizchi/js_builtin/global",
+  "mizchi/js_builtin/json",
+  "mizchi/js_core" @core,
 }
 
 supported_targets = "js"

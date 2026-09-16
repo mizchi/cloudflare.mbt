@@ -210,7 +210,7 @@ pub fn VectorizeVector::from_js(js : @core.Any) -> VectorizeVector {
   } else {
     Some(meta_js)
   }
-  { id, values, ns, metadata }
+  { id, values, ns, metadata, }
 }
 
 ///|

@@ -1,8 +1,8 @@
 import {
   "mizchi/js",
-  "mizchi/js/web/http",
-  "mizchi/js/web/url",
-  "mizchi/js/core",
+  "mizchi/js_web/http",
+  "mizchi/js_web/url",
+  "mizchi/js_core" @core,
   "mizchi/cloudflare",
 }
 

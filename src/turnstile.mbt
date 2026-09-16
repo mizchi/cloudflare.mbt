@@ -56,7 +56,7 @@ pub(all) struct TurnstileVerifyOptions {
 
 ///|
 pub fn TurnstileVerifyOptions::default() -> TurnstileVerifyOptions {
-  { remoteIp: None, idempotencyKey: None }
+  { remoteIp: None, idempotencyKey: None, }
 }
 
 ///|

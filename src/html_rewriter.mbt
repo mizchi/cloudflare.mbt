@@ -74,13 +74,13 @@ pub fn ElementHandler::to_js(self : ElementHandler) -> @core.Any {
 ///|
 /// Create an element-only handler
 pub fn ElementHandler::element_only(f : (Element) -> Unit) -> ElementHandler {
-  { element: Some(f), comments: None, text: None }
+  { element: Some(f), comments: None, text: None, }
 }
 
 ///|
 /// Create a text-only handler
 pub fn ElementHandler::text_only(f : (TextChunk) -> Unit) -> ElementHandler {
-  { element: None, comments: None, text: Some(f) }
+  { element: None, comments: None, text: Some(f), }
 }
 
 ///|
@@ -88,7 +88,7 @@ pub fn ElementHandler::text_only(f : (TextChunk) -> Unit) -> ElementHandler {
 pub fn ElementHandler::comments_only(
   f : (HTMLComment) -> Unit,
 ) -> ElementHandler {
-  { element: None, comments: Some(f), text: None }
+  { element: None, comments: Some(f), text: None, }
 }
 
 ///|
@@ -136,13 +136,13 @@ pub fn ContentOptions::to_js(self : ContentOptions) -> @core.Any {
 ///|
 /// Default content options (text mode)
 pub fn ContentOptions::text() -> ContentOptions {
-  { html: false }
+  { html: false, }
 }
 
 ///|
 /// HTML content options
 pub fn ContentOptions::html_mode() -> ContentOptions {
-  { html: true }
+  { html: true, }
 }
 
 // ============================================

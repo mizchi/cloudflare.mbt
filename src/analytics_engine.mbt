@@ -57,7 +57,7 @@ pub fn AnalyticsEngineDataPoint::to_js(
 
 ///|
 pub fn AnalyticsEngineDataPoint::default() -> AnalyticsEngineDataPoint {
-  { indexes: None, doubles: None, blobs: None }
+  { indexes: None, doubles: None, blobs: None, }
 }
 
 ///|

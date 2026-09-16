@@ -2,7 +2,7 @@
 package "mizchi/cloudflare/containers"
 
 import {
-  "mizchi/js/core",
+  "mizchi/js_core",
 }
 
 // Values
@@ -12,18 +12,18 @@ import {
 // Types and methods
 #external
 pub type Container
-pub fn Container::as_any(Self) -> @core.Any
-pub async fn Container::container_fetch(Self, @core.Any, Int) -> @core.Any
-pub async fn Container::exec(Self, String, options? : @core.Any) -> @core.Any
+pub fn Container::as_any(Self) -> @js_core.Any
+pub async fn Container::container_fetch(Self, @js_core.Any, Int) -> @js_core.Any
+pub async fn Container::exec(Self, String, options? : @js_core.Any) -> @js_core.Any
 pub async fn Container::list_processes(Self) -> Array[ContainerProcess]
-pub async fn Container::start_process(Self, String, options? : @core.Any) -> ContainerProcess
-pub async fn Container::ws_connect(Self, @core.Any, Int) -> @core.Any
+pub async fn Container::start_process(Self, String, options? : @js_core.Any) -> ContainerProcess
+pub async fn Container::ws_connect(Self, @js_core.Any, Int) -> @js_core.Any
 
 #external
 pub type ContainerProcess
-pub fn ContainerProcess::as_any(Self) -> @core.Any
+pub fn ContainerProcess::as_any(Self) -> @js_core.Any
 pub fn ContainerProcess::command(Self) -> String
-pub async fn ContainerProcess::get_logs(Self) -> @core.Any
+pub async fn ContainerProcess::get_logs(Self) -> @js_core.Any
 pub fn ContainerProcess::id(Self) -> String
 pub async fn ContainerProcess::kill(Self) -> Unit
 pub fn ContainerProcess::status(Self) -> String
@@ -33,7 +33,7 @@ pub(all) struct WaitForPortOptions {
   mode : String?
   timeout : Int?
 }
-pub fn WaitForPortOptions::to_js(Self) -> @core.Any
+pub fn WaitForPortOptions::to_js(Self) -> @js_core.Any
 
 // Type aliases
 
